@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <meta name="description" content="Down 100 - A fun falling platform game">
   <title>Down 100 Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
   <style>
     * {
       margin: 0;
@@ -13,50 +17,98 @@
     }
     
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: #0f0f23;
+      background-image: 
+        radial-gradient(at 47% 33%, hsl(240, 60%, 15%) 0, transparent 59%),
+        radial-gradient(at 82% 65%, hsl(270, 55%, 12%) 0, transparent 55%),
+        linear-gradient(135deg, #1a1a35 0%, #0f0f23 100%);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       overflow-x: hidden;
-      padding: 10px 0;
+      padding: 15px 0;
+      color: #e5e7eb;
     }
     
     .game-wrapper {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       margin: 0 auto;
-      padding: 0 10px;
+      padding: 0 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 16px;
     }
     
+    /* 游戏标题区域 */
+    .game-header {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    
+    .game-title {
+      font-size: 32px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+      letter-spacing: -0.5px;
+      text-shadow: 0 0 30px rgba(96, 165, 250, 0.3);
+    }
+    
+    .game-subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+    
+    /* 游戏容器 - 毛玻璃卡片效果 */
     #game-root {
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      background: rgba(30, 30, 50, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
       overflow: hidden;
-      max-height: calc(100vh - 20px);
+      max-height: calc(100vh - 30px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    #game-root:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(96, 165, 250, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
     
     .loading {
       text-align: center;
-      padding: 40px;
-      color: white;
-      font-size: 18px;
+      padding: 50px 30px;
+      color: #e5e7eb;
+      font-size: 16px;
+      font-weight: 500;
     }
     
     .loading-spinner {
-      border: 4px solid rgba(255, 255, 255, 0.3);
-      border-top: 4px solid white;
+      border: 3px solid rgba(96, 165, 250, 0.2);
+      border-top: 3px solid #60a5fa;
       border-radius: 50%;
       width: 40px;
       height: 40px;
-      animation: spin 1s linear infinite;
+      animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
       margin: 20px auto;
+      box-shadow: 0 0 20px rgba(96, 165, 250, 0.3);
     }
     
     @keyframes spin {
@@ -64,81 +116,171 @@
       100% { transform: rotate(360deg); }
     }
     
-    .info {
-      text-align: center;
-      color: white;
-      margin-top: 10px;
-      padding: 0 20px;
-      max-width: 100%;
+    /* 信息卡片容器 */
+    .info-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
     }
     
-    .info h1 {
-      font-size: 24px;
-      margin-bottom: 8px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    }
-    
-    .info p {
-      font-size: 13px;
-      opacity: 0.9;
-      line-height: 1.4;
-      margin-bottom: 8px;
-    }
-    
-    .controls-tip {
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-top: 8px;
+    /* 卡片基础样式 */
+    .info-card {
+      background: rgba(30, 30, 50, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
       backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
     }
     
-    .controls-tip h3 {
-      font-size: 14px;
-      margin-bottom: 6px;
+    .info-card:hover {
+      background: rgba(30, 30, 50, 0.7);
+      border-color: rgba(96, 165, 250, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 10px 30px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(96, 165, 250, 0.1);
     }
     
-    .controls-tip ul {
+    .info-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #f3f4f6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      letter-spacing: -0.3px;
+    }
+    
+    .info-card h3::before {
+      content: '';
+      display: inline-block;
+      width: 3px;
+      height: 16px;
+      background: linear-gradient(180deg, #60a5fa 0%, #a78bfa 100%);
+      border-radius: 2px;
+    }
+    
+    .info-card ul {
       list-style: none;
-      font-size: 12px;
-      text-align: left;
+      font-size: 13px;
+      color: #d1d5db;
+      line-height: 1.7;
     }
     
-    .controls-tip li {
-      margin: 3px 0;
-      padding-left: 16px;
+    .info-card li {
+      margin: 8px 0;
+      padding-left: 20px;
       position: relative;
-      line-height: 1.3;
+      font-weight: 400;
     }
     
-    .controls-tip li:before {
+    .info-card li::before {
       content: "▸";
       position: absolute;
-      left: 0;
-      font-size: 10px;
+      left: 4px;
+      color: #60a5fa;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    
+    .info-card li strong {
+      color: #f9fafb;
+      font-weight: 600;
+    }
+    
+    /* 特殊强调文本 */
+    .info-description {
+      text-align: center;
+      font-size: 14px;
+      color: #9ca3af;
+      padding: 12px 20px;
+      background: rgba(30, 30, 50, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      font-weight: 500;
+      line-height: 1.6;
+      backdrop-filter: blur(5px);
+    }
+    
+    /* 页脚链接 */
+    .footer-links {
+      text-align: center;
+      padding: 12px;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    
+    .footer-links a {
+      color: #60a5fa;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-links a:hover {
+      color: #93c5fd;
+      text-decoration: underline;
     }
     
     /* 响应式调整 */
+    @media (max-width: 600px) {
+      .game-title {
+        font-size: 28px;
+      }
+      
+      .game-wrapper {
+        padding: 0 8px;
+      }
+      
+      .info-card {
+        padding: 14px;
+      }
+    }
+    
     @media (max-height: 800px) {
-      .info {
-        font-size: 0.9em;
+      body {
+        padding: 10px 0;
       }
-      .info h1 {
-        font-size: 20px;
+      
+      .game-wrapper {
+        gap: 12px;
       }
-      .controls-tip {
-        padding: 8px 10px;
+      
+      .game-title {
+        font-size: 26px;
+        margin-bottom: 6px;
       }
-      .controls-tip li {
-        margin: 2px 0;
+      
+      .info-card {
+        padding: 12px;
+      }
+      
+      .info-card h3 {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+      
+      .info-card li {
+        margin: 6px 0;
+        font-size: 12px;
       }
     }
     
     @media (max-height: 700px) {
-      .info p {
+      .info-description {
         display: none;
       }
-      .controls-tip:last-child {
+      
+      .info-cards .info-card:last-child {
+        display: none;
+      }
+    }
+    
+    @media (max-height: 600px) {
+      .game-header {
         display: none;
       }
     }
@@ -146,6 +288,13 @@
 </head>
 <body>
   <div class="game-wrapper">
+    <!-- 游戏标题 -->
+    <div class="game-header">
+      <h1 class="game-title">🎮 Down Floor</h1>
+      <p class="game-subtitle">A Thrilling Platform Survival Adventure</p>
+    </div>
+    
+    <!-- 游戏画布 -->
     <div id="game-root">
       <div class="loading">
         <div class="loading-spinner"></div>
@@ -153,29 +302,39 @@
       </div>
     </div>
     
-    <div class="info">
-      <h1>🎮 Down floor</h1>
-      <p>控制小人左右移动，踩在不断上升的平台上生存下去！</p>
-      
-      <div class="controls-tip">
-        <h3>🎯 操作说明</h3>
+    <!-- 游戏描述 -->
+    <div class="info-description">
+      控制小人左右移动，踩在不断上升的平台上，尽可能长时间生存下去！
+    </div>
+    
+    <!-- 信息卡片 -->
+    <div class="info-cards">
+      <!-- 操作说明卡片 -->
+      <div class="info-card">
+        <h3>操作说明</h3>
         <ul>
-          <li><strong>键盘:</strong> ← → 方向键控制移动</li>
-          <li><strong>触屏:</strong> 点击屏幕左/右半边</li>
-          <li><strong>开始:</strong> 空格键 / Enter / 点击按钮</li>
+          <li><strong>键盘控制:</strong> 使用 ← → 方向键控制移动</li>
+          <li><strong>触屏控制:</strong> 点击屏幕左/右半边进行移动</li>
+          <li><strong>开始游戏:</strong> 按空格键 / Enter 或点击按钮</li>
         </ul>
       </div>
       
-      <div class="controls-tip">
-        <h3>🎲 平台类型</h3>
+      <!-- 平台类型卡片 -->
+      <div class="info-card">
+        <h3>平台类型</h3>
         <ul>
-          <li><strong>普通平台:</strong> 基础踩踏</li>
-          <li><strong>弹簧平台:</strong> 超级跳跃</li>
-          <li><strong>传送带:</strong> 自动左右移动</li>
-          <li><strong>尖刺平台:</strong> 扣血但可踩</li>
-          <li><strong>假平台:</strong> 会消失的陷阱</li>
+          <li><strong>普通平台:</strong> 安全的基础平台</li>
+          <li><strong>弹簧平台:</strong> 提供超级跳跃能力</li>
+          <li><strong>传送带:</strong> 自动推动你左右移动</li>
+          <li><strong>尖刺平台:</strong> 造成伤害但仍可踩踏</li>
+          <li><strong>假平台:</strong> 踩上去会消失的陷阱</li>
         </ul>
       </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <div class="footer-links">
+      Made with ❤️ | Press Space to Start
     </div>
   </div>
 
