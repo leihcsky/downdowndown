@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Down 100 - A fun falling platform game">
+  <title>Down 100 Game</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: hidden;
+      padding: 10px 0;
+    }
+    
+    .game-wrapper {
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 0 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    #game-root {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      max-height: calc(100vh - 20px);
+    }
+    
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: white;
+      font-size: 18px;
+    }
+    
+    .loading-spinner {
+      border: 4px solid rgba(255, 255, 255, 0.3);
+      border-top: 4px solid white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 20px auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .info {
+      text-align: center;
+      color: white;
+      margin-top: 10px;
+      padding: 0 20px;
+      max-width: 100%;
+    }
+    
+    .info h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .info p {
+      font-size: 13px;
+      opacity: 0.9;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    
+    .controls-tip {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .controls-tip h3 {
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+    
+    .controls-tip ul {
+      list-style: none;
+      font-size: 12px;
+      text-align: left;
+    }
+    
+    .controls-tip li {
+      margin: 3px 0;
+      padding-left: 16px;
+      position: relative;
+      line-height: 1.3;
+    }
+    
+    .controls-tip li:before {
+      content: "▸";
+      position: absolute;
+      left: 0;
+      font-size: 10px;
+    }
+    
+    /* 响应式调整 */
+    @media (max-height: 800px) {
+      .info {
+        font-size: 0.9em;
+      }
+      .info h1 {
+        font-size: 20px;
+      }
+      .controls-tip {
+        padding: 8px 10px;
+      }
+      .controls-tip li {
+        margin: 2px 0;
+      }
+    }
+    
+    @media (max-height: 700px) {
+      .info p {
+        display: none;
+      }
+      .controls-tip:last-child {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="game-wrapper">
+    <div id="game-root">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        <p>Loading game resources...</p>
+      </div>
+    </div>
+    
+    <div class="info">
+      <h1>🎮 Down floor</h1>
+      <p>控制小人左右移动，踩在不断上升的平台上生存下去！</p>
+      
+      <div class="controls-tip">
+        <h3>🎯 操作说明</h3>
+        <ul>
+          <li><strong>键盘:</strong> ← → 方向键控制移动</li>
+          <li><strong>触屏:</strong> 点击屏幕左/右半边</li>
+          <li><strong>开始:</strong> 空格键 / Enter / 点击按钮</li>
+        </ul>
+      </div>
+      
+      <div class="controls-tip">
+        <h3>🎲 平台类型</h3>
+        <ul>
+          <li><strong>普通平台:</strong> 基础踩踏</li>
+          <li><strong>弹簧平台:</strong> 超级跳跃</li>
+          <li><strong>传送带:</strong> 自动左右移动</li>
+          <li><strong>尖刺平台:</strong> 扣血但可踩</li>
+          <li><strong>假平台:</strong> 会消失的陷阱</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import Downfloor from './downgame.js';
+    
+    // 游戏配置
+    const config = {
+      root: './',  // 资源文件根路径
+      
+      // 难度配置（可选，使用默认配置）
+      levelConfig: [
+        {
+          level_threshold: 20,
+          floor_chances: [10, 3, 1, 1, 1, 2], // [普通, 假, 尖刺, 传送带左, 传送带右, 弹簧]
+          speed_boost: 1.01
+        },
+        {
+          level_threshold: 40,
+          floor_chances: [7, 3, 1, 1, 1, 2],
+          speed_boost: 1.04
+        },
+        {
+          level_threshold: 60,
+          floor_chances: [5, 4, 2, 2, 2, 3],
+          speed_boost: 1.08
+        },
+        {
+          level_threshold: 80,
+          floor_chances: [3, 5, 3, 3, 3, 3],
+          speed_boost: 1.12
+        }
+      ],
+      
+      // 国际化文本（可选，使用默认配置）
+      i18n: {
+        life: "HP:",
+        score: "Floor:",
+        soundOn: "Sound: ON",
+        soundOff: "Sound: OFF",
+        start: "Start",
+        gameOver: "Game Over",
+        restart: "Restart",
+        continue: "Continue",
+        keyHint: "(Space / Enter)",
+        best: "BEST:",
+        reset: "RESET",
+        resetConfirm: "Are you sure you want to reset the best score?",
+        confirm: "Confirm",
+        cancel: "Cancel"
+      }
+    };
+    
+    // 初始化游戏
+    Downfloor.init('#game-root', config);
+  </script>
+</body>
+</html>
+

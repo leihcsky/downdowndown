@@ -1,0 +1,278 @@
+.downfloor-container {
+    text-align: center;
+    width: 100%;
+    position: relative;
+    user-select: none;
+
+    @keyframes pulse {
+        0% {
+            transform: scale(1)
+        }
+
+        50% {
+            transform: scale(1.2)
+        }
+
+        to {
+            transform: scale(1)
+        }
+    }
+
+    @keyframes modal-pop {
+        0% {
+            opacity: 0
+        }
+    }
+}
+
+.downfloor-container .downfloor-canvas {
+    display: block;
+    margin: 0 auto;
+    padding-top: 39px
+}
+
+.downfloor-container .downfloor-overlay-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: #414141b3
+}
+
+.downfloor-container .downfloor-overlay-container.running {
+    background: none;
+    bottom: unset
+}
+
+.downfloor-container .downfloor-topbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    pointer-events: none;
+    height: 35px;
+    padding: 4px 4px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffffe6;
+    font-family: monospace;
+    font-size: 18px
+}
+
+@media only screen and (max-width: 500px) {
+    .downfloor-container .downfloor-topbar {
+        padding: 4px 10px 0
+    }
+}
+
+.downfloor-container .downfloor-life-container {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.downfloor-container .downfloor-life-bar {
+    display: flex
+}
+
+.downfloor-container .downfloor-life-bar-unit {
+    width: 7px;
+    height: 15px;
+    border-left: 2px solid #000;
+    border-top: 2.5px solid #000;
+    border-bottom: 2.5px solid #000;
+    background: #fff;
+    transition: background-color .2s
+}
+
+.downfloor-container .downfloor-life-bar-unit:last-child {
+    border-right: 2px solid #000
+}
+
+.downfloor-container .downfloor-life-bar-unit.active {
+    background: #3f3
+}
+
+.downfloor-container .downfloor-life-bar-unit.damaged {
+    animation: pulse .3s ease-in-out
+}
+
+.downfloor-container .downfloor-score-container {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px
+}
+
+.downfloor-container .downfloor-sound-toggle {
+    pointer-events: auto;
+    padding: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color .2s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center
+}
+
+.downfloor-container .downfloor-sound-toggle .sound-off {
+    opacity: .2
+}
+
+.downfloor-container .downfloor-game-controls {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    pointer-events: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.downfloor-container .downfloor-game-button {
+    padding: 20px 40px;
+    font-size: 24pt;
+    font-family: monospace;
+    font-weight: 700;
+    color: #000;
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 6px #0000001a;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.downfloor-container .downfloor-game-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px #0003
+}
+
+.downfloor-container .downfloor-game-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px #0000001a
+}
+
+.downfloor-container .downfloor-game-button.restart-hidden {
+    visibility: hidden
+}
+
+.downfloor-container .downfloor-game-button.restart-visible {
+    visibility: visible
+}
+
+.downfloor-container .downfloor-game-button-hint {
+    font-size: 10pt;
+    margin-top: 8px;
+    opacity: .7
+}
+
+.downfloor-container .downfloor-game-over-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px
+}
+
+.downfloor-container .downfloor-game-over-text {
+    font-size: 40pt;
+    font-family: monospace;
+    font-weight: 900;
+    color: #000;
+    white-space: nowrap;
+    text-shadow: 3px 3px 0 #fff, -3px 3px 0 #fff, 3px -3px 0 #fff, -3px -3px 0 #fff, 3px 0px 0 #fff, -3px 0px 0 #fff, 0px 3px 0 #fff, 0px -3px 0 #fff;
+    transition: all .3s
+}
+
+.downfloor-container .downfloor-best-score,
+.downfloor-container .downfloor-reset-button {
+    font-size: 18px;
+    font-family: monospace;
+    color: #fff
+}
+
+.downfloor-container .downfloor-reset-button {
+    cursor: pointer
+}
+
+.downfloor-container .downfloor-modal-container {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    width: 100%;
+    justify-items: center;
+    align-content: center;
+    opacity: 0;
+    visibility: hidden;
+    overscroll-behavior: contain;
+    z-index: 999;
+    background-color: #000c;
+    color: inherit;
+    animation: modal-pop .2s ease-out;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(0, 0, .2, 1);
+    transition-property: transform, opacity, visibility;
+    overflow-y: hidden;
+    border: none
+}
+
+.downfloor-container .downfloor-modal-box {
+    width: 70%;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: #00000040 0 25px 50px -12px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(0, 0, .2, 1);
+    padding: 1.5rem;
+    font-family: monospace
+}
+
+@media only screen and (max-width: 600px) {
+    .downfloor-container .downfloor-modal-box {
+        max-width: 95vw
+    }
+}
+
+.downfloor-container .downfloor-modal-text {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 1.5rem
+}
+
+.downfloor-container .downfloor-modal-action {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between
+}
+
+.downfloor-container .downfloor-modal-btn {
+    font-family: monospace;
+    cursor: pointer;
+    padding: 4px 8px;
+    border: none;
+    font-size: 16px;
+    text-align: center;
+    font-weight: 700;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    touch-action: manipulation;
+    border-radius: 3px
+}
+
+.downfloor-container .reset-button {
+    color: #fff;
+    background-color: #2e2e4e
+}
+
+#downfloor-resources {
+    display: none
+}
