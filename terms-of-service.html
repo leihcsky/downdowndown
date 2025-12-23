@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service - DownDownDown Game</title>
+  <meta name="description" content="Terms of Service for DownDownDown. Read our terms and conditions for using our free browser-based arcade platform game.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://downdowndown.live/terms-of-service.html">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3293976111230987"
+     crossorigin="anonymous"></script>
+  
+  <style>
+    :root {
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1f2e;
+      --bg-card: rgba(30, 30, 50, 0.5);
+      --text-primary: #e5e7eb;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    
+    /* Light Theme */
+    body.light-theme {
+      --bg-primary: #f3f4f6;
+      --bg-secondary: #e5e7eb;
+      --bg-card: rgba(255, 255, 255, 0.8);
+      --text-primary: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border-color: var(--accent);
+    }
+    
+    .theme-toggle-icon {
+      font-size: 18px;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    
+    .theme-toggle:hover .theme-toggle-icon {
+      transform: rotate(15deg);
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    header p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 10px;
+    }
+    
+    .nav-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-hover);
+    }
+    
+    .content-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .content-section h2 {
+      font-size: 24px;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+    
+    .content-section h3 {
+      font-size: 20px;
+      color: var(--text-primary);
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+    
+    .content-section p {
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+    }
+    
+    .content-section ul, .content-section ol {
+      margin-left: 25px;
+      margin-bottom: 15px;
+    }
+    
+    .content-section li {
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+    
+    .highlight-box {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .warning-box {
+      background: rgba(249, 115, 22, 0.1);
+      border-left: 4px solid #f97316;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    footer {
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 15px;
+      }
+      
+      .content-section {
+        padding: 20px;
+      }
+      
+      header h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <span class="theme-toggle-icon">🌙</span>
+    <span class="theme-toggle-text">Dark</span>
+  </button>
+  
+  <div class="container">
+    <header>
+      <h1>Terms of Service</h1>
+      <p><strong>Last Updated:</strong> December 23, 2025</p>
+      <p>Effective Date: December 23, 2025</p>
+      <a href="index.html" class="nav-link">← Back to Game</a>
+    </header>
+    
+    <div class="content-section">
+      <h2>1. Acceptance of Terms</h2>
+      <p>
+        Welcome to DownDownDown ("the Game," "we," "us," or "our"). By accessing or using our website at <strong>downdowndown.live</strong> and playing our game, you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use our service.
+      </p>
+      <div class="highlight-box">
+        <strong>Important:</strong> By playing the game, you acknowledge that you have read, understood, and agree to these Terms and our Privacy Policy.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>2. Description of Service</h2>
+      <p>
+        DownDownDown is a free browser-based arcade platform game. The service includes:
+      </p>
+      <ul>
+        <li>Access to the game through your web browser</li>
+        <li>Gameplay features including score tracking and game controls</li>
+        <li>Optional local storage of game preferences and high scores</li>
+      </ul>
+      <p>
+        <strong>The service is provided "as is" and "as available" without warranties of any kind.</strong>
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>3. Eligibility</h2>
+      <p>
+        Our game is available to users of all ages. However:
+      </p>
+      <ul>
+        <li>If you are under 13 years old, you must have parental consent to use our service</li>
+        <li>If you are between 13 and 18 years old, you confirm that you have your parent or guardian's permission to use our service</li>
+        <li>By using our service, you represent that you meet these age requirements</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>4. User Conduct</h2>
+      <p>
+        When using our service, you agree NOT to:
+      </p>
+      <ul>
+        <li>Use the service for any illegal or unauthorized purpose</li>
+        <li>Attempt to hack, reverse engineer, or modify the game code</li>
+        <li>Use automated scripts, bots, or cheats to manipulate gameplay</li>
+        <li>Interfere with or disrupt the service or servers</li>
+        <li>Attempt to gain unauthorized access to our systems</li>
+        <li>Collect or harvest any information from the service</li>
+        <li>Impersonate any person or entity</li>
+        <li>Transmit any viruses, malware, or harmful code</li>
+      </ul>
+      
+      <div class="warning-box">
+        <strong>Violation of Terms:</strong> We reserve the right to terminate or restrict access to users who violate these terms.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>5. Intellectual Property Rights</h2>
+      
+      <h3>5.1 Our Rights</h3>
+      <p>
+        All content, features, and functionality of DownDownDown, including but not limited to:
+      </p>
+      <ul>
+        <li>Game design, graphics, and code</li>
+        <li>Text, images, and audio</li>
+        <li>Logos and trademarks</li>
+        <li>Software and technology</li>
+      </ul>
+      <p>
+        are owned by DownDownDown and are protected by copyright, trademark, and other intellectual property laws.
+      </p>
+      
+      <h3>5.2 Limited License</h3>
+      <p>
+        We grant you a limited, non-exclusive, non-transferable, revocable license to:
+      </p>
+      <ul>
+        <li>Access and play the game for personal, non-commercial use</li>
+        <li>Share links to our website</li>
+      </ul>
+      
+      <h3>5.3 Restrictions</h3>
+      <p>
+        You may NOT:
+      </p>
+      <ul>
+        <li>Copy, modify, or distribute the game code</li>
+        <li>Create derivative works based on our game</li>
+        <li>Sell, rent, or sublicense access to the game</li>
+        <li>Remove or alter any copyright notices</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>6. No Registration Required</h2>
+      <p>
+        Our game does not require registration or account creation. All game data (high scores, preferences) is stored locally in your browser. We do not maintain user accounts or personal profiles.
+      </p>
+      <div class="highlight-box">
+        <strong>Local Data:</strong> Your high scores and preferences are stored only on your device. Clearing browser data will delete this information.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>7. Free Service</h2>
+      <p>
+        DownDownDown is provided free of charge. We do not:
+      </p>
+      <ul>
+        <li>Charge fees to play the game</li>
+        <li>Offer in-game purchases</li>
+        <li>Require subscriptions</li>
+        <li>Sell user data</li>
+      </ul>
+      <p>
+        We reserve the right to display advertisements in compliance with our Privacy Policy.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>8. Disclaimer of Warranties</h2>
+      <p>
+        THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO:
+      </p>
+      <ul>
+        <li>Warranties of merchantability</li>
+        <li>Fitness for a particular purpose</li>
+        <li>Non-infringement</li>
+        <li>Accuracy, reliability, or availability</li>
+      </ul>
+      <p>
+        We do not warrant that:
+      </p>
+      <ul>
+        <li>The service will be uninterrupted or error-free</li>
+        <li>Defects will be corrected</li>
+        <li>The service is free of viruses or harmful components</li>
+        <li>Results from using the service will be accurate or reliable</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>9. Limitation of Liability</h2>
+      <p>
+        TO THE FULLEST EXTENT PERMITTED BY LAW, DOWNDOWNDOWN SHALL NOT BE LIABLE FOR:
+      </p>
+      <ul>
+        <li>Any indirect, incidental, special, consequential, or punitive damages</li>
+        <li>Loss of profits, data, use, goodwill, or other intangible losses</li>
+        <li>Damages resulting from your use or inability to use the service</li>
+        <li>Unauthorized access to or alteration of your data</li>
+        <li>Any third-party conduct or content on the service</li>
+      </ul>
+      <p>
+        Our total liability shall not exceed $10 USD or the amount you paid to us in the last 12 months (which is $0 for a free service).
+      </p>
+      
+      <div class="warning-box">
+        <strong>Jurisdiction Note:</strong> Some jurisdictions do not allow the exclusion of certain warranties or limitation of liability. In such cases, the above limitations may not apply to you.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>10. Indemnification</h2>
+      <p>
+        You agree to indemnify, defend, and hold harmless DownDownDown and its affiliates, officers, directors, employees, and agents from any claims, liabilities, damages, losses, and expenses, including reasonable attorney's fees, arising out of or in any way connected with:
+      </p>
+      <ul>
+        <li>Your use of the service</li>
+        <li>Your violation of these Terms</li>
+        <li>Your violation of any third-party rights</li>
+        <li>Any content you submit or transmit</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>11. Third-Party Links and Services</h2>
+      <p>
+        Our service may contain links to third-party websites or services. We are not responsible for:
+      </p>
+      <ul>
+        <li>The content or practices of third-party sites</li>
+        <li>Privacy policies of external services</li>
+        <li>Damages arising from third-party interactions</li>
+      </ul>
+      <p>
+        We encourage you to review the terms and privacy policies of any third-party services you visit.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>12. Modifications to Service</h2>
+      <p>
+        We reserve the right to:
+      </p>
+      <ul>
+        <li>Modify or discontinue the service at any time without notice</li>
+        <li>Change game features, content, or availability</li>
+        <li>Perform maintenance that may temporarily interrupt service</li>
+      </ul>
+      <p>
+        We shall not be liable to you or any third party for any modification, suspension, or discontinuation of the service.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>13. Changes to Terms</h2>
+      <p>
+        We may update these Terms from time to time. Changes will be posted on this page with an updated "Last Updated" date. Continued use of the service after changes constitutes acceptance of the new Terms.
+      </p>
+      <div class="highlight-box">
+        <strong>Your Responsibility:</strong> Please review these Terms periodically. Significant changes will be highlighted on our homepage.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>14. Termination</h2>
+      <p>
+        We may terminate or suspend your access to the service immediately, without prior notice or liability, for any reason, including:
+      </p>
+      <ul>
+        <li>Breach of these Terms</li>
+        <li>Fraudulent or illegal activity</li>
+        <li>At our sole discretion</li>
+      </ul>
+      <p>
+        Upon termination, your right to use the service will immediately cease. All provisions that should reasonably survive termination shall survive, including liability limitations and dispute resolution provisions.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>15. Governing Law and Dispute Resolution</h2>
+      
+      <h3>15.1 Governing Law</h3>
+      <p>
+        These Terms shall be governed by and construed in accordance with the laws of the jurisdiction where DownDownDown operates, without regard to conflict of law principles.
+      </p>
+      
+      <h3>15.2 Dispute Resolution</h3>
+      <p>
+        Any disputes arising from these Terms or use of the service shall be resolved through:
+      </p>
+      <ol>
+        <li><strong>Informal Resolution:</strong> Contact us first to attempt to resolve the dispute informally</li>
+        <li><strong>Arbitration:</strong> If informal resolution fails, disputes shall be resolved through binding arbitration</li>
+        <li><strong>Class Action Waiver:</strong> You agree to resolve disputes on an individual basis, not as a class action</li>
+      </ol>
+      
+      <h3>15.3 Exceptions</h3>
+      <p>
+        Either party may seek injunctive relief in court for intellectual property infringement or unauthorized access to the service.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>16. Severability</h2>
+      <p>
+        If any provision of these Terms is found to be unenforceable or invalid, that provision shall be limited or eliminated to the minimum extent necessary, and the remaining provisions shall remain in full force and effect.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>17. Entire Agreement</h2>
+      <p>
+        These Terms, together with our Privacy Policy, constitute the entire agreement between you and DownDownDown regarding the service and supersede all prior agreements and understandings.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>18. Waiver</h2>
+      <p>
+        No waiver of any term of these Terms shall be deemed a further or continuing waiver of such term or any other term. Our failure to assert any right or provision under these Terms shall not constitute a waiver of such right or provision.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>19. Contact Information</h2>
+      <p>
+        If you have questions about these Terms, please contact us:
+      </p>
+      <div class="highlight-box">
+        <strong>Email:</strong> support@downdowndown.live<br>
+        <strong>Website:</strong> https://downdowndown.live/<br>
+        <strong>Response Time:</strong> We aim to respond within 48 hours
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>20. Acknowledgment</h2>
+      <p>
+        BY USING DOWNDOWNDOWN, YOU ACKNOWLEDGE THAT YOU HAVE READ THESE TERMS OF SERVICE AND AGREE TO BE BOUND BY THEM.
+      </p>
+    </div>
+    
+    <footer>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>&copy; 2025 DownDownDown. All rights reserved.</p>
+      <p style="font-size: 14px; margin-top: 10px;">
+        Free browser-based arcade platform game
+      </p>
+    </footer>
+  </div>
+  
+  <script>
+    // Theme Toggle Functionality
+    (function() {
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = themeToggle.querySelector('.theme-toggle-icon');
+      const themeText = themeToggle.querySelector('.theme-toggle-text');
+      
+      // Check for saved theme preference or default to dark
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      
+      // Apply saved theme on page load
+      if (currentTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Light';
+      }
+      
+      // Toggle theme
+      themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('light-theme');
+        
+        const isLight = document.body.classList.contains('light-theme');
+        
+        if (isLight) {
+          themeIcon.textContent = '☀️';
+          themeText.textContent = 'Light';
+          localStorage.setItem('theme', 'light');
+        } else {
+          themeIcon.textContent = '🌙';
+          themeText.textContent = 'Dark';
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+

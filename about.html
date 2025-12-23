@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us - DownDownDown Game</title>
+  <meta name="description" content="Learn about DownDownDown, a free browser-based arcade platform game. Our mission is to provide accessible, fun gaming experiences for everyone.">
+  <link rel="canonical" href="https://downdowndown.live/about.html">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3293976111230987"
+     crossorigin="anonymous"></script>
+  
+  <style>
+    :root {
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1f2e;
+      --bg-card: rgba(30, 30, 50, 0.5);
+      --text-primary: #e5e7eb;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    
+    /* Light Theme */
+    body.light-theme {
+      --bg-primary: #f3f4f6;
+      --bg-secondary: #e5e7eb;
+      --bg-card: rgba(255, 255, 255, 0.8);
+      --text-primary: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border-color: var(--accent);
+    }
+    
+    .theme-toggle-icon {
+      font-size: 18px;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    
+    .theme-toggle:hover .theme-toggle-icon {
+      transform: rotate(15deg);
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    header p {
+      font-size: 18px;
+      color: var(--text-secondary);
+    }
+    
+    .nav-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-hover);
+    }
+    
+    .content-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .content-section h2 {
+      font-size: 24px;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+    
+    .content-section h3 {
+      font-size: 20px;
+      color: var(--text-primary);
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+    
+    .content-section p {
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+    }
+    
+    .content-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .content-section li {
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      padding-left: 25px;
+      position: relative;
+    }
+    
+    .content-section li::before {
+      content: "→";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+    }
+    
+    .highlight-box {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    footer {
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 15px;
+      }
+      
+      .content-section {
+        padding: 20px;
+      }
+      
+      header h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <span class="theme-toggle-icon">🌙</span>
+    <span class="theme-toggle-text">Dark</span>
+  </button>
+  
+  <div class="container">
+    <header>
+      <h1>About DownDownDown</h1>
+      <p>Free Browser-Based Arcade Platform Gaming</p>
+      <a href="index.html" class="nav-link">← Back to Game</a>
+    </header>
+    
+    <div class="content-section">
+      <h2>Our Mission</h2>
+      <p>
+        DownDownDown is dedicated to providing free, accessible, and engaging arcade gaming experiences directly in your browser. We believe that great games should be available to everyone, without downloads, installations, or barriers to entry.
+      </p>
+      <div class="highlight-box">
+        <strong>Our Core Values:</strong> Accessibility, Fun, Simplicity, and Free Gaming for All
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>What is DownDownDown?</h2>
+      <p>
+        DownDownDown is a fast-paced vertical arcade platform game inspired by classic arcade survival mechanics. Players navigate through endlessly falling platforms, avoiding obstacles and testing their reflexes in an increasingly challenging environment.
+      </p>
+      
+      <h3>Game Features</h3>
+      <ul>
+        <li>100% Free to Play - No hidden costs or premium features</li>
+        <li>Instant Browser Play - No downloads or installations required</li>
+        <li>Cross-Platform Compatible - Works on desktop, tablet, and mobile devices</li>
+        <li>Simple Controls - Easy to learn, challenging to master</li>
+        <li>Endless Gameplay - Progressive difficulty for unlimited replayability</li>
+        <li>Privacy-Focused - No tracking, no data collection</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>Why We Built This</h2>
+      <p>
+        In an era where many games require large downloads, expensive hardware, or premium subscriptions, we wanted to create something different. DownDownDown represents our vision of what web gaming should be:
+      </p>
+      <ul>
+        <li><strong>Accessible:</strong> Play instantly on any device with a browser</li>
+        <li><strong>Free:</strong> No paywalls, no ads interrupting gameplay</li>
+        <li><strong>Simple:</strong> Focus on pure gameplay, not complex mechanics</li>
+        <li><strong>Fun:</strong> Addictive arcade action that keeps you coming back</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>Technology</h2>
+      <p>
+        DownDownDown is built using modern web technologies to deliver smooth, responsive gameplay:
+      </p>
+      <ul>
+        <li>HTML5 Canvas for high-performance graphics rendering</li>
+        <li>JavaScript game engine optimized for 60 FPS gameplay</li>
+        <li>Responsive design that adapts to any screen size</li>
+        <li>Touch controls for mobile devices, keyboard for desktop</li>
+        <li>No external dependencies or plugins required</li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>Our Commitment</h2>
+      <p>
+        We are committed to:
+      </p>
+      <ul>
+        <li>Keeping the game free and accessible to everyone</li>
+        <li>Protecting user privacy and data security</li>
+        <li>Continuously improving gameplay and user experience</li>
+        <li>Maintaining transparent and ethical practices</li>
+        <li>Supporting a positive gaming community</li>
+      </ul>
+      
+      <div class="highlight-box">
+        <strong>Contact Us:</strong> For questions, feedback, or support, please reach out to us at <a href="mailto:support@downdowndown.live" style="color: #60a5fa;">support@downdowndown.live</a>
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>Website Information</h2>
+      <p>
+        <strong>Domain:</strong> downdowndown.live<br>
+        <strong>Type:</strong> Free browser-based arcade game<br>
+        <strong>Content:</strong> Family-friendly gaming entertainment<br>
+        <strong>Availability:</strong> Global, 24/7 access<br>
+        <strong>Platform:</strong> Web (desktop, mobile, tablet)
+      </p>
+    </div>
+    
+    <footer>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>&copy; 2025 DownDownDown. All rights reserved.</p>
+      <p style="font-size: 14px; margin-top: 10px;">
+        A free browser-based arcade platform game
+      </p>
+    </footer>
+  </div>
+  
+  <script>
+    // Theme Toggle Functionality
+    (function() {
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = themeToggle.querySelector('.theme-toggle-icon');
+      const themeText = themeToggle.querySelector('.theme-toggle-text');
+      
+      // Check for saved theme preference or default to dark
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      
+      // Apply saved theme on page load
+      if (currentTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Light';
+      }
+      
+      // Toggle theme
+      themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('light-theme');
+        
+        const isLight = document.body.classList.contains('light-theme');
+        
+        if (isLight) {
+          themeIcon.textContent = '☀️';
+          themeText.textContent = 'Light';
+          localStorage.setItem('theme', 'light');
+        } else {
+          themeIcon.textContent = '🌙';
+          themeText.textContent = 'Dark';
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+

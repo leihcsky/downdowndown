@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy - DownDownDown Game</title>
+  <meta name="description" content="Privacy Policy for DownDownDown. Learn how we protect your privacy and handle data on our free browser-based arcade game.">
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://downdowndown.live/privacy-policy.html">
+  
+  <!-- Favicons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3293976111230987"
+     crossorigin="anonymous"></script>
+  
+  <style>
+    :root {
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1f2e;
+      --bg-card: rgba(30, 30, 50, 0.5);
+      --text-primary: #e5e7eb;
+      --text-secondary: #9ca3af;
+      --text-muted: #6b7280;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    
+    /* Light Theme */
+    body.light-theme {
+      --bg-primary: #f3f4f6;
+      --bg-secondary: #e5e7eb;
+      --bg-card: rgba(255, 255, 255, 0.8);
+      --text-primary: #1f2937;
+      --text-secondary: #4b5563;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-hover: #1d4ed8;
+      --border: rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Theme Toggle Button */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+    
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      border-color: var(--accent);
+    }
+    
+    .theme-toggle-icon {
+      font-size: 18px;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+    
+    .theme-toggle:hover .theme-toggle-icon {
+      transform: rotate(15deg);
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    
+    header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      margin-bottom: 15px;
+      background: linear-gradient(135deg, #60a5fa, #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    header p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 10px;
+    }
+    
+    .nav-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-hover);
+    }
+    
+    .content-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+    
+    .content-section h2 {
+      font-size: 24px;
+      color: var(--accent);
+      margin-bottom: 15px;
+    }
+    
+    .content-section h3 {
+      font-size: 20px;
+      color: var(--text-primary);
+      margin-top: 25px;
+      margin-bottom: 10px;
+    }
+    
+    .content-section p {
+      color: var(--text-secondary);
+      margin-bottom: 15px;
+    }
+    
+    .content-section ul {
+      list-style: none;
+      padding-left: 0;
+    }
+    
+    .content-section li {
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+      padding-left: 25px;
+      position: relative;
+    }
+    
+    .content-section li::before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 20px;
+    }
+    
+    .highlight-box {
+      background: rgba(59, 130, 246, 0.1);
+      border-left: 4px solid var(--accent);
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    .warning-box {
+      background: rgba(249, 115, 22, 0.1);
+      border-left: 4px solid #f97316;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    
+    footer {
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 30px 15px;
+      }
+      
+      .content-section {
+        padding: 20px;
+      }
+      
+      header h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Toggle Button -->
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    <span class="theme-toggle-icon">🌙</span>
+    <span class="theme-toggle-text">Dark</span>
+  </button>
+  
+  <div class="container">
+    <header>
+      <h1>Privacy Policy</h1>
+      <p><strong>Last Updated:</strong> December 23, 2025</p>
+      <p>Effective Date: December 23, 2025</p>
+      <a href="index.html" class="nav-link">← Back to Game</a>
+    </header>
+    
+    <div class="content-section">
+      <h2>1. Introduction</h2>
+      <p>
+        Welcome to DownDownDown ("we," "our," or "us"). We are committed to protecting your privacy and ensuring transparency about our data practices. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website <strong>downdowndown.live</strong> and use our free browser-based arcade game.
+      </p>
+      <div class="highlight-box">
+        <strong>Key Point:</strong> We prioritize your privacy. Our game requires no registration, no personal information, and collects minimal data necessary only for game functionality.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>2. Information We Collect</h2>
+      
+      <h3>2.1 Information You Provide</h3>
+      <p>
+        We do NOT require you to create an account or provide personal information to play our game. The game is designed to be completely accessible without registration.
+      </p>
+      
+      <h3>2.2 Automatically Collected Information</h3>
+      <p>
+        When you visit our website, we may automatically collect certain information:
+      </p>
+      <ul>
+        <li><strong>Browser Information:</strong> Browser type, version, and language preference</li>
+        <li><strong>Device Information:</strong> Device type, operating system, screen resolution</li>
+        <li><strong>Usage Data:</strong> Pages visited, time spent, features used</li>
+        <li><strong>IP Address:</strong> For security and analytics purposes (anonymized)</li>
+        <li><strong>Cookies:</strong> Essential cookies for game functionality (see Cookie Policy below)</li>
+      </ul>
+      
+      <h3>2.3 Local Storage</h3>
+      <p>
+        We use browser local storage to save:
+      </p>
+      <ul>
+        <li>Your high scores (stored locally on your device only)</li>
+        <li>Game preferences (sound settings, theme selection)</li>
+        <li>No personal data is stored or transmitted</li>
+      </ul>
+      
+      <div class="highlight-box">
+        <strong>Important:</strong> All game data is stored locally in your browser. We do not have access to or store this data on our servers.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>3. How We Use Your Information</h2>
+      <p>
+        The limited information we collect is used solely for:
+      </p>
+      <ul>
+        <li><strong>Game Functionality:</strong> Providing and maintaining game features</li>
+        <li><strong>Performance:</strong> Monitoring and improving game performance</li>
+        <li><strong>Analytics:</strong> Understanding how users interact with our game (aggregated data only)</li>
+        <li><strong>Security:</strong> Protecting against fraud, abuse, and security threats</li>
+        <li><strong>Legal Compliance:</strong> Meeting legal and regulatory requirements</li>
+      </ul>
+      
+      <div class="warning-box">
+        <strong>We Will NEVER:</strong>
+        <ul style="margin-top: 10px;">
+          <li>Sell your personal information to third parties</li>
+          <li>Use your data for targeted advertising without consent</li>
+          <li>Share your information except as described in this policy</li>
+          <li>Require personal information to play the game</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>4. Cookies and Tracking Technologies</h2>
+      
+      <h3>4.1 Essential Cookies</h3>
+      <p>
+        We use essential cookies required for basic game functionality:
+      </p>
+      <ul>
+        <li>Session management</li>
+        <li>Preference storage (theme, sound settings)</li>
+        <li>Security and fraud prevention</li>
+      </ul>
+      
+      <h3>4.2 Analytics Cookies</h3>
+      <p>
+        We may use analytics services (such as Google Analytics) to understand:
+      </p>
+      <ul>
+        <li>How users interact with our game</li>
+        <li>Which features are most popular</li>
+        <li>How to improve user experience</li>
+      </ul>
+      <p>
+        Analytics data is anonymized and aggregated. You can opt-out of analytics tracking using browser settings or privacy tools.
+      </p>
+      
+      <h3>4.3 Managing Cookies</h3>
+      <p>
+        You can control cookies through your browser settings. Note that disabling essential cookies may affect game functionality.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>5. Third-Party Services</h2>
+      <p>
+        We may use third-party services for:
+      </p>
+      <ul>
+        <li><strong>Analytics:</strong> Google Analytics (anonymized data)</li>
+        <li><strong>Hosting:</strong> Web hosting services</li>
+        <li><strong>CDN:</strong> Content delivery for faster loading</li>
+      </ul>
+      <p>
+        These third parties have their own privacy policies. We recommend reviewing them:
+      </p>
+      <ul>
+        <li>Google Analytics: <a href="https://policies.google.com/privacy" style="color: #60a5fa;" target="_blank">Google Privacy Policy</a></li>
+      </ul>
+    </div>
+    
+    <div class="content-section">
+      <h2>6. Data Security</h2>
+      <p>
+        We implement appropriate technical and organizational measures to protect your information:
+      </p>
+      <ul>
+        <li>HTTPS encryption for all data transmission</li>
+        <li>Regular security assessments</li>
+        <li>Access controls and authentication</li>
+        <li>Secure hosting infrastructure</li>
+      </ul>
+      <p>
+        However, no method of transmission over the Internet is 100% secure. We cannot guarantee absolute security but strive to use commercially acceptable means to protect your data.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>7. Children's Privacy</h2>
+      <p>
+        Our game is family-friendly and suitable for all ages. However, we do not knowingly collect personal information from children under 13 years of age. If you believe a child has provided us with personal information, please contact us immediately.
+      </p>
+      <div class="highlight-box">
+        <strong>COPPA Compliance:</strong> We comply with the Children's Online Privacy Protection Act (COPPA). No registration or personal information is required to play.
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>8. Your Privacy Rights</h2>
+      <p>
+        Depending on your location, you may have the following rights:
+      </p>
+      
+      <h3>8.1 GDPR Rights (EU Users)</h3>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of your data</li>
+        <li><strong>Rectification:</strong> Correct inaccurate data</li>
+        <li><strong>Erasure:</strong> Request deletion of your data</li>
+        <li><strong>Restriction:</strong> Limit how we use your data</li>
+        <li><strong>Portability:</strong> Receive your data in a structured format</li>
+        <li><strong>Objection:</strong> Object to data processing</li>
+        <li><strong>Withdraw Consent:</strong> Withdraw consent at any time</li>
+      </ul>
+      
+      <h3>8.2 CCPA Rights (California Users)</h3>
+      <ul>
+        <li>Know what personal information is collected</li>
+        <li>Know if personal information is sold or disclosed</li>
+        <li>Opt-out of sale of personal information</li>
+        <li>Request deletion of personal information</li>
+        <li>Non-discrimination for exercising privacy rights</li>
+      </ul>
+      
+      <h3>8.3 How to Exercise Your Rights</h3>
+      <p>
+        To exercise any of these rights, contact us at: <strong>support@downdowndown.live</strong>
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>9. Data Retention</h2>
+      <p>
+        We retain information only as long as necessary:
+      </p>
+      <ul>
+        <li><strong>Local Storage:</strong> Data remains until you clear browser storage</li>
+        <li><strong>Analytics Data:</strong> Retained for 26 months (Google Analytics default)</li>
+        <li><strong>Server Logs:</strong> Retained for 90 days for security purposes</li>
+      </ul>
+      <p>
+        You can delete locally stored data at any time by clearing your browser cache and local storage.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>10. International Data Transfers</h2>
+      <p>
+        Our website may be accessed from around the world. If you access our site from outside your country of residence, your data may be transferred to and processed in other countries.
+      </p>
+      <p>
+        We ensure appropriate safeguards are in place for international data transfers, complying with applicable data protection laws.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>11. Do Not Track Signals</h2>
+      <p>
+        Some browsers have a "Do Not Track" feature. Currently, there is no industry standard for how to respond to these signals. We do not track users across third-party websites and therefore do not respond to Do Not Track signals.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>12. Changes to This Privacy Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated "Last Updated" date. We encourage you to review this Privacy Policy periodically.
+      </p>
+      <p>
+        <strong>Significant changes</strong> will be communicated through a notice on our homepage.
+      </p>
+    </div>
+    
+    <div class="content-section">
+      <h2>13. Contact Us</h2>
+      <p>
+        If you have questions, concerns, or requests regarding this Privacy Policy, please contact us:
+      </p>
+      <div class="highlight-box">
+        <strong>Email:</strong> support@downdowndown.live<br>
+        <strong>Website:</strong> https://downdowndown.live/<br>
+        <strong>Response Time:</strong> We aim to respond within 48 hours
+      </div>
+    </div>
+    
+    <div class="content-section">
+      <h2>14. Legal Basis for Processing (GDPR)</h2>
+      <p>
+        Under GDPR, we process your data based on:
+      </p>
+      <ul>
+        <li><strong>Legitimate Interest:</strong> Providing and improving our game service</li>
+        <li><strong>Consent:</strong> Where you have given consent (e.g., analytics cookies)</li>
+        <li><strong>Legal Obligation:</strong> Complying with applicable laws</li>
+      </ul>
+    </div>
+    
+    <footer>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>&copy; 2025 DownDownDown. All rights reserved.</p>
+      <p style="font-size: 14px; margin-top: 10px;">
+        This privacy policy is designed to comply with GDPR, CCPA, and COPPA regulations.
+      </p>
+    </footer>
+  </div>
+  
+  <script>
+    // Theme Toggle Functionality
+    (function() {
+      const themeToggle = document.getElementById('themeToggle');
+      const themeIcon = themeToggle.querySelector('.theme-toggle-icon');
+      const themeText = themeToggle.querySelector('.theme-toggle-text');
+      
+      // Check for saved theme preference or default to dark
+      const currentTheme = localStorage.getItem('theme') || 'dark';
+      
+      // Apply saved theme on page load
+      if (currentTheme === 'light') {
+        document.body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+        themeText.textContent = 'Light';
+      }
+      
+      // Toggle theme
+      themeToggle.addEventListener('click', function() {
+        document.body.classList.toggle('light-theme');
+        
+        const isLight = document.body.classList.contains('light-theme');
+        
+        if (isLight) {
+          themeIcon.textContent = '☀️';
+          themeText.textContent = 'Light';
+          localStorage.setItem('theme', 'light');
+        } else {
+          themeIcon.textContent = '🌙';
+          themeText.textContent = 'Dark';
+          localStorage.setItem('theme', 'dark');
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
+
