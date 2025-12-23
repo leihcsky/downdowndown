@@ -1,3 +1,4 @@
+import { PlatformStyles } from './platform-styles.js';
 var be, b, Ze, z, De, et, tt, it, Le, Pe, Se, nt, oe = {}, st = [], vt = /acit|ex(?:s|g|n|p|$)|rph|grid|ows|mnc|ntw|ine[ch]|zoo|^ord|itera/i, Fe = Array.isArray;
 function $(i, e) {
   for (var t in e) i[t] = e[t];
@@ -910,17 +911,7 @@ class D extends he {
     super(e, t, K.NORMAL);
   }
   draw(e) {
-    if (e.save(), e.translate(this.x, this.y), !D.pattern) {
-      const t = new Image();
-      t.src = "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACwAQCdASoIAAgACACkJaACdADzd7iAAPgrrXPLQJHCx7fwucbjCdahXytJpJuCY9EwAAAA", t.onload = function() {
-        const r = document.createElement("canvas").getContext("2d");
-        if (r) {
-          const s = r.createPattern(t, "repeat");
-          s && (D.pattern = s);
-        }
-      };
-    }
-    D.pattern ? e.fillStyle = D.pattern : e.fillStyle = "#FFF", e.fillRect(0, -12, p, S), e.fillStyle = "#D3F8FF", e.fillRect(0, -12, p, 2), e.fillRect(0, -12, 2, S), e.fillStyle = "#000E5C", e.fillRect(0, -2, p, 2), e.fillRect(p - 2, -12, 2, S), e.restore();
+    PlatformStyles.drawNormalPlatform(e, this.x, this.y, p, S);
   }
   getHeight() {
     return S;
@@ -947,15 +938,9 @@ class je extends he {
   }
   draw(e, t) {
     this.restoring && this.restore(t);
-    const n = this.getHeight();
-    e.save(), e.translate(this.x, this.y), e.fillStyle = "green", e.fillRect(0, -2, p, 2), e.fillRect(0, -n, p, 2);
-    const r = 10, s = (p - r * 4) / 3;
-    e.lineWidth = s, e.strokeStyle = "grey", e.setLineDash([1, 2]), e.beginPath();
-    for (let o = 0; o < 3; o++) {
-      const a = r + s * 0.5 + (r + s) * o;
-      e.moveTo(a, -n + 2), e.lineTo(a, -2);
-    }
-    e.stroke(), e.restore();
+    PlatformStyles.drawSpringPlatform(
+      e, this.x, this.y, p, S, this.spring, t
+    );
   }
   landing(e, t, n) {
     this.touchTime = n, this.spring = G, e.vy = t, v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.SPRING });
@@ -986,58 +971,17 @@ class _e extends he {
     return S;
   }
   draw(e) {
-    this.direction === "left" ? ++this.offset >= 20 && (this.offset = 0) : --this.offset < 0 && (this.offset = 20), ++this.highlightCounter >= 7 && (this.highlightCounter = 0, this.arrowHighlightIndex = (this.arrowHighlightIndex + 1) % 4), e.save(), e.translate(this.x, this.y);
-    const t = S * 0.5, n = e.createLinearGradient(
-      0,
-      -12 / 2,
-      p,
-      -12 / 2
+    // 更新动画效果
+    this.direction === "left" ? ++this.offset >= 20 && (this.offset = 0) : --this.offset < 0 && (this.offset = 20);
+    // 箭头高亮递减，产生正确的滚动方向
+    ++this.highlightCounter >= 7 && (this.highlightCounter = 0, this.arrowHighlightIndex = (this.arrowHighlightIndex - 1 + 4) % 4);
+    
+    // 绘制传送带
+    PlatformStyles.drawConveyorPlatform(
+      e, this.x, this.y, p, S, 
+      this.direction, this.offset, this.arrowHighlightIndex
     );
-    n.addColorStop(0, "#FFFFFF"), n.addColorStop(0.5, "#000000"), n.addColorStop(1, "#FFFFFF"), e.fillStyle = n, Xe(
-      e,
-      1,
-      -10,
-      p - 2,
-      S - 2,
-      t
-    ), e.fill(), e.strokeStyle = "#777", e.lineWidth = 1, e.setLineDash([]), Xe(
-      e,
-      1,
-      -11,
-      p - 2,
-      S - 2,
-      t
-    ), e.stroke(), e.strokeStyle = "#BBB", e.lineWidth = 2, e.beginPath(), e.arc(t, -6, t - 1, Math.PI, 1.5 * Math.PI, !1), e.lineTo(p - t, -11), e.arc(
-      p - t,
-      -6,
-      t - 1,
-      1.5 * Math.PI,
-      2 * Math.PI,
-      !1
-    ), e.stroke(), e.strokeStyle = "#555", e.beginPath(), e.arc(t, -6, t - 1, 0.5 * Math.PI, Math.PI, !1), e.lineTo(p - t, -1), e.arc(p - t, -6, t - 1, 0, 0.5 * Math.PI, !1), e.stroke(), e.strokeStyle = "#999", e.setLineDash([15, 5]), e.lineWidth = 2.5, e.lineDashOffset = this.offset, e.beginPath(), e.moveTo(t, -11), e.lineTo(p - t, -11), e.stroke(), e.lineDashOffset = -this.offset, e.beginPath(), e.moveTo(t, -1), e.lineTo(p - t, -1), e.stroke(), e.strokeStyle = "#777", e.setLineDash([]), e.lineWidth = 1, e.beginPath(), e.moveTo(t + 2, -9), e.lineTo(p - t - 2, -9), e.stroke(), e.beginPath(), e.moveTo(t + 2, -3), e.lineTo(p - t - 2, -3), e.stroke(), e.setLineDash([]), e.lineWidth = 1.5;
-    const r = p * 0.2, s = p * 0.8, o = s - r, a = 4, c = o / (a - 1);
-    for (let l = 0; l < a; l++) {
-      const _ = s - l * c, d = l === this.arrowHighlightIndex;
-      e.strokeStyle = d ? "#FFD700" : "#FFF", e.fillStyle = d ? "#FFD700" : "#FFF", e.beginPath(), e.moveTo(_, -9), e.lineTo(this.direction === "left" ? _ - 6 : _ + 6, -6), e.lineTo(_, -3), e.closePath(), e.fill(), e.stroke();
-    }
-    const h = e.createRadialGradient(
-      t,
-      -6,
-      0,
-      t,
-      -6,
-      t - 3
-    );
-    h.addColorStop(0, "#FFFFFF"), h.addColorStop(0.7, "#AAAAAA"), h.addColorStop(1, "#777777");
-    const u = e.createRadialGradient(
-      p - t,
-      -6,
-      0,
-      p - t,
-      -6,
-      t - 3
-    );
-    u.addColorStop(0, "#FFFFFF"), u.addColorStop(0.7, "#AAAAAA"), u.addColorStop(1, "#777777"), e.beginPath(), e.arc(t, -6, t - 3, 0, 2 * Math.PI, !1), e.fillStyle = h, e.fill(), e.strokeStyle = "#555", e.lineWidth = 1, e.stroke(), e.beginPath(), e.arc(p - t, -6, t - 3, 0, 2 * Math.PI, !1), e.fillStyle = u, e.fill(), e.strokeStyle = "#555", e.lineWidth = 1, e.stroke(), e.restore();
+    
   }
   landing(e, t) {
     e.vy = t, e.vx = this.direction === "left" ? -0.1 : Mt, v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.LR });
@@ -1057,25 +1001,8 @@ class Je extends he {
     return S;
   }
   draw(e) {
-    e.save(), e.translate(this.x, this.y);
-    const t = 10, n = -this.getHeight(), r = e.createLinearGradient(
-      0,
-      n + t / 2,
-      p,
-      n + t / 2
-    );
-    r.addColorStop(0, "#FFFFFF"), r.addColorStop(0.5, "#000000"), r.addColorStop(1, "#FFFFFF"), e.fillStyle = r, e.fillRect(1, n + 1, p - 2, t - 2), e.fillStyle = "#999", e.fillRect(0, n, p, 1), e.fillRect(0, n, 1, t), e.fillStyle = "#000", e.fillRect(p - 1, n, 1, t), e.fillRect(0, n + t - 1, p, 1);
-    const s = n, o = s - pe, a = 0.5, c = p - 0.5;
-    for (let h = a; h < c; h += Z * 2) {
-      const u = h, l = Math.min(h + Z, c), _ = Math.min(h + Z * 2, c), d = e.createLinearGradient(
-        u,
-        o + (s - o) / 2,
-        _,
-        o + (s - o) / 2
-      );
-      d.addColorStop(0, "#333333"), d.addColorStop(0.5, "#FFFFFF"), d.addColorStop(1, "#333333"), e.beginPath(), e.moveTo(u, s), e.lineTo(l, o), e.lineTo(_, s), e.closePath(), e.fillStyle = d, e.fill(), e.strokeStyle = "#555", e.lineWidth = 0.5, e.stroke();
-    }
-    e.restore();
+    PlatformStyles.drawSpikePlatform(e, this.x, this.y, p, S, Date.now());
+    
   }
   landing(e, t, n) {
     e.vy = t, e.hurt(4, n), v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.HURT });
@@ -1097,19 +1024,11 @@ class Qe extends he {
     return this.height;
   }
   draw(e, t) {
-    if (this.restoring && this.restore(t), e.save(), e.translate(this.x, this.y), this.height >= S || this.height <= 0)
-      e.fillStyle = "#999", e.fillRect(0, -12, p, S);
-    else {
-      const n = this.height / S, r = Math.round(102 * n);
-      let s = 51 + r;
-      e.fillStyle = "rgb(" + s + "," + s + "," + s + ")", e.fillRect(0, -this.getHeight(), p, this.getHeight()), s = 153 + r, e.fillStyle = "rgb(" + s + "," + s + "," + s + ")", e.fillRect(
-        0,
-        -12,
-        p,
-        S - this.getHeight()
-      );
-    }
-    e.restore();
+    this.restoring && this.restore(t);
+    PlatformStyles.drawFakePlatform(
+      e, this.x, this.y, p, S, this.height, t
+    );
+    
   }
   landing(e, t, n) {
     this.touchTime = n, e.vy = t, v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.ROLL });
