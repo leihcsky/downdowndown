@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="iconGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="iconGlow">
+      <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#1a1f2e" stroke="url(#iconGradient)" stroke-width="2"/>
+  
+  <!-- Three stacked platforms (representing the game) -->
+  <g filter="url(#iconGlow)">
+    <!-- Top platform -->
+    <rect x="16" y="18" width="32" height="4" rx="2" fill="#60a5fa" opacity="0.9"/>
+    
+    <!-- Middle platform -->
+    <rect x="12" y="30" width="40" height="4" rx="2" fill="#3b82f6" opacity="0.9"/>
+    
+    <!-- Bottom platform -->
+    <rect x="8" y="42" width="48" height="4" rx="2" fill="#2563eb" opacity="0.9"/>
+    
+    <!-- Falling character/dot -->
+    <circle cx="32" cy="25" r="3" fill="#ffffff"/>
+    
+    <!-- Motion arrow -->
+    <g transform="translate(32, 50)">
+      <path d="M -4 0 L 0 6 L 4 0 Z" fill="#60a5fa" opacity="0.8"/>
+    </g>
+  </g>
+</svg>

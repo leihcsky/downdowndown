@@ -1,0 +1,13 @@
+# Robots.txt for DownDownDown.live
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /*.json$
+
+# Sitemap location
+Sitemap: https://downdowndown.live/sitemap.xml
+
+# Crawl-delay (optional, for considerate crawling)
+Crawl-delay: 1
+

@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" width="400" height="120">
+  <defs>
+    <!-- Gradient for main text -->
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Shadow gradient -->
+    <linearGradient id="shadowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#1e3a8a;stop-opacity:0.6" />
+    </linearGradient>
+    
+    <!-- Glow effect -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background arrows (decorative) -->
+  <g opacity="0.15">
+    <path d="M 30 10 L 40 20 L 35 20 L 35 35 L 25 35 L 25 20 L 20 20 Z" fill="#3b82f6"/>
+    <path d="M 360 75 L 370 85 L 365 85 L 365 100 L 355 100 L 355 85 L 350 85 Z" fill="#3b82f6"/>
+  </g>
+  
+  <!-- Shadow layer -->
+  <text x="52" y="72" font-family="'Inter', Arial, sans-serif" font-size="48" font-weight="900" fill="url(#shadowGradient)" opacity="0.4">
+    DownDownDown
+  </text>
+  
+  <!-- Main text with stacked/cascading effect -->
+  <g filter="url(#glow)">
+    <!-- "Down" - top level -->
+    <text x="50" y="45" font-family="'Inter', Arial, sans-serif" font-size="48" font-weight="900" fill="url(#textGradient)" letter-spacing="-1">
+      Down
+    </text>
+    
+    <!-- "Down" - middle level (slightly offset) -->
+    <text x="50" y="70" font-family="'Inter', Arial, sans-serif" font-size="48" font-weight="900" fill="url(#textGradient)" letter-spacing="-1" opacity="0.85">
+      Down
+    </text>
+    
+    <!-- "Down" - bottom level (more offset) -->
+    <text x="50" y="95" font-family="'Inter', Arial, sans-serif" font-size="48" font-weight="900" fill="url(#textGradient)" letter-spacing="-1" opacity="0.7">
+      Down
+    </text>
+  </g>
+  
+  <!-- Falling arrow accent -->
+  <g transform="translate(340, 30)">
+    <!-- Arrow body -->
+    <rect x="18" y="0" width="4" height="60" fill="#60a5fa" opacity="0.8"/>
+    <!-- Arrow head -->
+    <path d="M 10 55 L 20 70 L 30 55 Z" fill="#60a5fa" opacity="0.8"/>
+    <!-- Motion lines -->
+    <line x1="12" y1="15" x2="12" y2="25" stroke="#60a5fa" stroke-width="2" opacity="0.4"/>
+    <line x1="28" y1="20" x2="28" y2="30" stroke="#60a5fa" stroke-width="2" opacity="0.4"/>
+    <line x1="12" y1="35" x2="12" y2="45" stroke="#60a5fa" stroke-width="2" opacity="0.3"/>
+  </g>
+</svg>
