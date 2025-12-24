@@ -811,7 +811,7 @@ class Wt {
   }
 }
 const Bt = {
-  lcPrefix: "down100-",
+  lcPrefix: "downdd-",
   levelConfig: [
     {
       level_threshold: 20,
@@ -905,13 +905,32 @@ class he {
     this.x = e, this.y = t, this.seq = ve.get(), this.type = n;
   }
 }
+const RC = { normal: null, conveyorLeft: new Map(), conveyorRight: new Map(), spike: null, fake: null };
+function CC(w, h) { const c = document.createElement("canvas"); c.width = w; c.height = h; return c; }
+function PWConveyor() {
+  const build = (dir, map) => {
+    for (let o = 0; o <= 20; o++) {
+      for (let h = 0; h < 4; h++) {
+        const k = o + ":" + h;
+        if (!map.get(k)) {
+          const c = CC(p, S); const g = c.getContext("2d");
+          PlatformStyles.drawConveyorPlatform(g, 0, S, p, S, dir, o, h);
+          map.set(k, c);
+        }
+      }
+    }
+  };
+  build("left", RC.conveyorLeft);
+  build("right", RC.conveyorRight);
+}
 class D extends he {
   static pattern;
   constructor(e, t) {
     super(e, t, K.NORMAL);
   }
   draw(e) {
-    PlatformStyles.drawNormalPlatform(e, this.x, this.y, p, S);
+    if (!RC.normal) { const c = CC(p, S); const g = c.getContext("2d"); PlatformStyles.drawNormalPlatform(g, 0, S, p, S); RC.normal = c; }
+    e.drawImage(RC.normal, this.x, this.y - S);
   }
   getHeight() {
     return S;
@@ -971,17 +990,13 @@ class _e extends he {
     return S;
   }
   draw(e) {
-    // 更新动画效果
     this.direction === "left" ? ++this.offset >= 20 && (this.offset = 0) : --this.offset < 0 && (this.offset = 20);
-    // 箭头高亮递减，产生正确的滚动方向
     ++this.highlightCounter >= 7 && (this.highlightCounter = 0, this.arrowHighlightIndex = (this.arrowHighlightIndex - 1 + 4) % 4);
-    
-    // 绘制传送带
-    PlatformStyles.drawConveyorPlatform(
-      e, this.x, this.y, p, S, 
-      this.direction, this.offset, this.arrowHighlightIndex
-    );
-    
+    const m = this.direction === "left" ? RC.conveyorLeft : RC.conveyorRight;
+    const k = this.offset + ":" + this.arrowHighlightIndex;
+    let img = m.get(k);
+    if (!img) { img = CC(p, S); const g = img.getContext("2d"); PlatformStyles.drawConveyorPlatform(g, 0, S, p, S, this.direction, this.offset, this.arrowHighlightIndex); m.set(k, img); }
+    e.drawImage(img, this.x, this.y - S);
   }
   landing(e, t) {
     e.vy = t, e.vx = this.direction === "left" ? -0.1 : Mt, v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.LR });
@@ -1001,8 +1016,10 @@ class Je extends he {
     return S;
   }
   draw(e) {
-    PlatformStyles.drawSpikePlatform(e, this.x, this.y, p, S, Date.now());
-    
+    if (!RC.spike) { const c = CC(p, S + 12); const g = c.getContext("2d"); PlatformStyles.drawSpikePlatform(g, 0, S + 12, p, S); RC.spike = c; }
+    e.drawImage(RC.spike, this.x, this.y - S - 12);
+    const t = Date.now();
+    if (Math.sin(t * 0.003) > 0.7) { e.fillStyle = "rgba(239, 68, 68, 0.2)"; e.fillRect(this.x, this.y - S - 12, p, S + 12); }
   }
   landing(e, t, n) {
     e.vy = t, e.hurt(4, n), v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.HURT });
@@ -1025,10 +1042,12 @@ class Qe extends he {
   }
   draw(e, t) {
     this.restoring && this.restore(t);
-    PlatformStyles.drawFakePlatform(
-      e, this.x, this.y, p, S, this.height, t
-    );
-    
+    if (this.height === S) {
+      if (!RC.fake) { const c = CC(p, S); const g = c.getContext("2d"); PlatformStyles.drawFakePlatform(g, 0, S, p, S, S); RC.fake = c; }
+      e.drawImage(RC.fake, this.x, this.y - S);
+    } else {
+      PlatformStyles.drawFakePlatform(e, this.x, this.y, p, S, this.height, t);
+    }
   }
   landing(e, t, n) {
     this.touchTime = n, e.vy = t, v.emit("scoreUpdate", ae(this.seq)), v.emit("floorLanding", { type: ie.ROLL });
@@ -1061,6 +1080,9 @@ class Vt {
   }
   hero = null;
   floors = [];
+  bgCanvas = null;
+  wallsCanvas = null;
+  ceilingCanvas = null;
   score = 0;
   isRunning = !1;
   isPaused = !1;
@@ -1070,7 +1092,7 @@ class Vt {
   level = 0;
   baseFloorVelocity = xe;
   init() {
-    this.drawBg(), this.resetGameState(), this.initEventListeners();
+    this.prepareStaticLayers(), PWConveyor(), this.resetGameState(), this.initEventListeners();
   }
   resetGameState() {
     ve.reset(), this.floors = [], this.hero = new Wt(
@@ -1086,56 +1108,47 @@ class Vt {
     v.off("scoreUpdate", this.handleScoreUpdate.bind(this));
   }
   /** =================== Render functions =================== */
-  drawBg() {
-    if (!this.ctx)
-      throw new Error("Canvas context is not available");
+  prepareStaticLayers() {
+    const bc = document.createElement("canvas");
+    bc.width = P; bc.height = L;
+    const bctx = bc.getContext("2d");
+    if (!bctx) throw new Error("Canvas context is not available");
     if (this.resources.images.bg) {
-      const e = this.ctx.createPattern(
-        this.resources.images.bg,
-        "repeat"
-      );
-      e && (this.ctx.fillStyle = e, this.ctx.fillRect(
-        0,
-        N,
-        P,
-        L - N
-      ));
+      const pat = bctx.createPattern(this.resources.images.bg, "repeat");
+      if (pat) { bctx.fillStyle = pat; bctx.fillRect(0, N, P, L - N); }
     }
-  }
-  drawBrick(e) {
-    D.pattern ? this.ctx.fillStyle = D.pattern : this.ctx.fillStyle = "#FFF", this.ctx.fillRect(0, 0, M, e), this.ctx.fillStyle = "#D3F8FF", this.ctx.fillRect(0, 0, M, 2), this.ctx.fillRect(0, 0, 2, e), this.ctx.fillStyle = "#000E5C", this.ctx.fillRect(0, e - 2, M, 2), this.ctx.fillRect(M - 2, 0, 2, e), this.ctx.restore();
-  }
-  drawWalls() {
-    for (let t = N; t < L; t += 20)
-      this.ctx.save(), this.ctx.translate(0, t), this.drawBrick(20);
-    for (let t = N; t < L; t += 20)
-      this.ctx.save(), this.ctx.translate(P - M, t), this.drawBrick(20);
-  }
-  drawCeiling() {
-    const t = N, n = this.ctx.createLinearGradient(
-      0,
-      t + 10 / 2,
-      P,
-      t + 10 / 2
-    );
-    n.addColorStop(0, "#FFFFFF"), n.addColorStop(0.5, "#000000"), n.addColorStop(1, "#FFFFFF"), this.ctx.fillStyle = n, this.ctx.fillRect(
-      1,
-      t + 1,
-      P - 2,
-      8
-    ), this.ctx.fillStyle = "#999", this.ctx.fillRect(0, t, P, 1), this.ctx.fillRect(0, t, 1, 10), this.ctx.fillStyle = "#000", this.ctx.fillRect(P - 1, t, 1, 10), this.ctx.fillRect(0, t + 10 - 1, P, 1);
+    this.bgCanvas = bc;
+    const wc = document.createElement("canvas");
+    wc.width = P; wc.height = L;
+    const wctx = wc.getContext("2d");
+    for (let t = N; t < L; t += 20) {
+      wctx.save(); wctx.translate(0, t);
+      D.pattern ? wctx.fillStyle = D.pattern : wctx.fillStyle = "#FFF"; wctx.fillRect(0, 0, M, 20);
+      wctx.fillStyle = "#D3F8FF"; wctx.fillRect(0, 0, M, 2); wctx.fillRect(0, 0, 2, 20);
+      wctx.fillStyle = "#000E5C"; wctx.fillRect(0, 20 - 2, M, 2); wctx.fillRect(M - 2, 0, 2, 20); wctx.restore();
+    }
+    for (let t = N; t < L; t += 20) {
+      wctx.save(); wctx.translate(P - M, t);
+      D.pattern ? wctx.fillStyle = D.pattern : wctx.fillStyle = "#FFF"; wctx.fillRect(0, 0, M, 20);
+      wctx.fillStyle = "#D3F8FF"; wctx.fillRect(0, 0, M, 2); wctx.fillRect(0, 0, 2, 20);
+      wctx.fillStyle = "#000E5C"; wctx.fillRect(0, 20 - 2, M, 2); wctx.fillRect(M - 2, 0, 2, 20); wctx.restore();
+    }
+    this.wallsCanvas = wc;
+    const cc = document.createElement("canvas");
+    cc.width = P; cc.height = L;
+    const cctx = cc.getContext("2d");
+    const t = N, n = cctx.createLinearGradient(0, t + 10 / 2, P, t + 10 / 2);
+    n.addColorStop(0, "#FFFFFF"); n.addColorStop(0.5, "#000000"); n.addColorStop(1, "#FFFFFF");
+    cctx.fillStyle = n; cctx.fillRect(1, t + 1, P - 2, 8);
+    cctx.fillStyle = "#999"; cctx.fillRect(0, t, P, 1); cctx.fillRect(0, t, 1, 10);
+    cctx.fillStyle = "#000"; cctx.fillRect(P - 1, t, 1, 10); cctx.fillRect(0, t + 10 - 1, P, 1);
     for (let r = 0.5; r < P; r += Z * 2) {
-      const s = r, o = r + Z, a = Math.min(r + Z * 2, P - 0.5), c = this.ctx.createLinearGradient(
-        s,
-        N + pe / 2,
-        a,
-        N + pe / 2
-      );
-      c.addColorStop(0, "#333333"), c.addColorStop(0.5, "#FFFFFF"), c.addColorStop(1, "#333333"), this.ctx.beginPath(), this.ctx.moveTo(s, t + 10), this.ctx.lineTo(
-        o,
-        t + 10 + pe
-      ), this.ctx.lineTo(a, t + 10), this.ctx.closePath(), this.ctx.fillStyle = c, this.ctx.fill(), this.ctx.strokeStyle = "#555", this.ctx.lineWidth = 0.5, this.ctx.stroke();
+      const s = r, o = r + Z, a = Math.min(r + Z * 2, P - 0.5), c = cctx.createLinearGradient(s, N + pe / 2, a, N + pe / 2);
+      c.addColorStop(0, "#333333"); c.addColorStop(0.5, "#FFFFFF"); c.addColorStop(1, "#333333");
+      cctx.beginPath(); cctx.moveTo(s, t + 10); cctx.lineTo(o, t + 10 + pe); cctx.lineTo(a, t + 10); cctx.closePath();
+      cctx.fillStyle = c; cctx.fill(); cctx.strokeStyle = "#555"; cctx.lineWidth = 0.5; cctx.stroke();
     }
+    this.ceilingCanvas = cc;
   }
   /** =================== Update on Frame functions =================== */
   generateFloor() {
@@ -1249,7 +1262,7 @@ class Vt {
   /** =================== Public Functions to Control Game =================== */
   // will call render() on resize, so make it public
   render(e) {
-    this.ctx.clearRect(0, 0, P, L), this.drawBg(), this.drawWalls(), this.floors.forEach((t) => t.draw(this.ctx, e)), this.hero && this.hero.draw(this.ctx, e), this.drawCeiling();
+    this.ctx.imageSmoothingEnabled = !1, this.ctx.clearRect(0, 0, P, L), this.bgCanvas && this.ctx.drawImage(this.bgCanvas, 0, 0), this.wallsCanvas && this.ctx.drawImage(this.wallsCanvas, 0, 0), this.floors.forEach((t) => t.draw(this.ctx, e)), this.hero && this.hero.draw(this.ctx, e), this.ceilingCanvas && this.ctx.drawImage(this.ceilingCanvas, 0, 0);
   }
   start() {
     this.isRunning || (this.isPaused ? this.resume() : (this.resetGameState(), this.isRunning = !0, this.isPaused = !1, this.lastTime = 0, this.animationFrameId = requestAnimationFrame(this.frameLoop)));
@@ -1441,17 +1454,24 @@ function Yt() {
     };
   }, []);
   const y = () => {
-    t.current && a.current?.images?.bg && a.current?.images?.hero && !n.current && (o((m) => ({
-      ...m,
-      status: R.READY
-    })), n.current = new Vt(
-      t.current,
-      a.current,
-      c.current?.levelConfig
-    )), a.current?.sounds?.normal && a.current?.sounds?.roll && a.current?.sounds?.spring && a.current?.sounds?.lr && a.current?.sounds?.hurt && a.current?.sounds?.dead && o((m) => ({
-      ...m,
-      soundReady: !0
-    }));
+    if (t.current && a.current?.images?.bg && a.current?.images?.hero && !n.current) {
+      o((m) => ({
+        ...m,
+        status: R.READY
+      }));
+      n.current = new Vt(
+        t.current,
+        a.current,
+        c.current?.levelConfig
+      );
+      n.current.render(0);
+    }
+    if (a.current?.sounds?.normal && a.current?.sounds?.roll && a.current?.sounds?.spring && a.current?.sounds?.lr && a.current?.sounds?.hurt && a.current?.sounds?.dead) {
+      o((m) => ({
+        ...m,
+        soundReady: !0
+      }));
+    }
   }, U = ({ type: m }) => {
     h.current && k(m);
   }, I = () => {
