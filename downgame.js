@@ -489,7 +489,7 @@ const gt = kt(void 0), Lt = ({ children: i, config: e }) => {
               "audio",
               {
                 id: "downfloor-normal",
-                src: `${o}sounds/normal.wav`,
+                src: `${o}sounds/normal.mp3`,
                 crossorigin: "anonymous",
                 onCanPlayThrough: (l) => u("normal", "sounds", l)
               }
@@ -534,7 +534,7 @@ const gt = kt(void 0), Lt = ({ children: i, config: e }) => {
               "audio",
               {
                 id: "downfloor-dead",
-                src: `${o}sounds/dead.wav`,
+                src: `${o}sounds/dead.mp3`,
                 crossorigin: "anonymous",
                 onCanPlayThrough: (l) => u("dead", "sounds", l)
               }

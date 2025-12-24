@@ -1,0 +1,12 @@
+*.md
+!readme.md
+!README.md
+generate-favicon.html
+game-engine.js
+logo-preview.html
+button-preview.html
+platform-preview.html
+start-game.bat
+temp-pattern.webp
+test-*.html
+zoom-test.html
