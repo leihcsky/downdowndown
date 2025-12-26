@@ -1232,12 +1232,33 @@ class Vt {
   }
   /** =================== Update on Game functions =================== */
   updateLevel() {
-    for (; this.level < this.levelConfig.length - 1 && this.score >= this.levelConfig[this.level + 1].level_threshold; ) {
+    // 1. Check for defined levels
+    while (this.level < this.levelConfig.length - 1 && this.score >= this.levelConfig[this.level + 1].level_threshold) {
       this.level++;
       const e = this.levelConfig[this.level];
       this.floorVelocity = this.baseFloorVelocity * e.speed_boost, console.info(
         `Difficulty increased to level: ${this.level}, at score: ${this.score}, speed boost: ${e.speed_boost}`
       );
+    }
+
+    // 2. Handle infinite scaling beyond defined levels
+    if (this.level >= this.levelConfig.length - 1) {
+      const lastConfig = this.levelConfig[this.levelConfig.length - 1];
+      const extraScore = this.score - lastConfig.level_threshold;
+      
+      if (extraScore > 0) {
+        // Increase speed by 0.5% per extra floor
+        // 100 extra floors = 50% speed increase
+        const extraBoost = extraScore * 0.005;
+        const newBoost = lastConfig.speed_boost + extraBoost;
+        
+        this.floorVelocity = this.baseFloorVelocity * newBoost;
+        
+        // Log occasionally
+        if (this.score % 10 === 0) {
+          console.info(`Infinite difficulty: score ${this.score}, speed boost ${newBoost.toFixed(3)}`);
+        }
+      }
     }
   }
   handleGameOver() {
