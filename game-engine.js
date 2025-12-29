@@ -1732,6 +1732,9 @@ class GameEngine {
 
     // Touch input (Scope to canvas to avoid blocking page scroll)
     const handleTouch = (e) => {
+      // Only prevent default if the game is actually running
+      if (this.state !== GAME_STATES.RUNNING) return;
+      
       const rect = this.canvas.getBoundingClientRect();
       const touches = e.changedTouches;
       let interacted = false;
@@ -1784,12 +1787,21 @@ class GameEngine {
     this.canvas.addEventListener('touchend', handleTouch, { passive: false });
     this.canvas.addEventListener('touchcancel', handleTouch, { passive: false });
 
-    // Unlock audio on first touch interaction
+    // Unlock audio on first user interaction (Touch, Click, Keydown)
     const unlockHandler = () => {
-        if (this.resources) this.resources.unlockAudio();
-        this.canvas.removeEventListener('touchstart', unlockHandler);
+        if (this.resources) {
+            this.resources.unlockAudio();
+        }
+        // Remove listeners once triggered
+        window.removeEventListener('touchstart', unlockHandler, true);
+        window.removeEventListener('click', unlockHandler, true);
+        window.removeEventListener('keydown', unlockHandler, true);
     };
-    this.canvas.addEventListener('touchstart', unlockHandler, { passive: true });
+
+    // Attach to window with capture to ensure we catch it early
+    window.addEventListener('touchstart', unlockHandler, { passive: true, capture: true });
+    window.addEventListener('click', unlockHandler, { capture: true });
+    window.addEventListener('keydown', unlockHandler, { capture: true });
   }
 
   handleSpacePress() {
@@ -2456,20 +2468,34 @@ function setupGameUI(container, engine) {
       style.id = styleId;
       style.textContent = `
           /* Force consistent width for all game buttons and boxes */
+          /* Default Desktop Style */
           .downfloor-container .downfloor-game-button,
           .downfloor-container .downfloor-best-score,
           .downfloor-container .downfloor-reset-button {
-              width: 90% !important;
+              width: auto !important;
+              min-width: 200px !important;
               max-width: 320px !important;
               box-sizing: border-box !important;
-              padding-left: 0 !important;
-              padding-right: 0 !important;
               justify-content: center !important;
               text-align: center !important;
+              padding: 20px 50px !important; /* Restore PC padding */
           }
 
+          /* Mobile Adaptation */
+          @media only screen and (max-width: 768px) {
+            .downfloor-container .downfloor-game-button,
+            .downfloor-container .downfloor-best-score,
+            .downfloor-container .downfloor-reset-button {
+                width: 90% !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+                padding-top: 20px !important;
+                padding-bottom: 20px !important;
+            }
+          }
+          
           .downfloor-container .downfloor-game-button {
-              padding: 20px 0 !important;
+              /* Keep specific overrides if needed, but padding is handled above */
           }
 
           /* Styles for Best Score and Reset Button (New Elements) */
@@ -2479,13 +2505,23 @@ function setupGameUI(container, engine) {
               font-family: 'Inter', sans-serif;
               font-weight: 600;
               color: #d1d5db;
-              padding: 12px 16px;
+              /* Overwrite padding for smaller buttons on PC if desired, or keep consistent */
+              padding: 12px 16px !important; 
               background: rgba(30, 30, 50, 0.6);
               border: 1px solid rgba(96, 165, 250, 0.2);
               border-radius: 8px;
               backdrop-filter: blur(10px);
               cursor: default;
           }
+
+          /* Mobile Adaptation for small buttons */
+           @media only screen and (max-width: 768px) {
+             .downfloor-container .downfloor-best-score,
+             .downfloor-container .downfloor-reset-button {
+                 padding: 12px 16px !important;
+             }
+           }
+
 
           .downfloor-container .downfloor-reset-button {
               cursor: pointer;
@@ -2731,8 +2767,14 @@ function setupGameUI(container, engine) {
     const confirmResetBtn = document.getElementById('confirm-reset');
     const cancelResetBtn = document.getElementById('cancel-reset');
     
-    startButton.addEventListener('click', () => engine.start());
-    restartButton.addEventListener('click', () => engine.restart());
+    startButton.addEventListener('click', () => {
+        if (engine.resources) engine.resources.unlockAudio();
+        engine.start();
+    });
+    restartButton.addEventListener('click', () => {
+        if (engine.resources) engine.resources.unlockAudio();
+        engine.restart();
+    });
     continueButton.addEventListener('click', () => engine.resume());
     soundToggle.addEventListener('click', () => engine.toggleSound());
     
