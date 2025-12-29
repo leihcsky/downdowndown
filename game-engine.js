@@ -47,7 +47,7 @@ class EventBus {
 const GAME_CONFIG = {
   // Canvas dimensions
   CANVAS_WIDTH: 320,
-  CANVAS_HEIGHT: 420, // Reduced from 459 to 420 (excluding top bar height 39px) to prevent vertical stretching
+  CANVAS_HEIGHT: 420, // Default 420 for Desktop, adjusted dynamically for mobile
   CANVAS_PADDING: 10, // M = 10
   
   // Player config
@@ -213,36 +213,119 @@ class ResourceLoader {
   }
 
   async loadImage(key, src) {
-    return new Promise((resolve, reject) => {
+    const load = (url, useCors) => new Promise((resolve, reject) => {
       const img = new Image();
-      // Important for Canvas getImageData and safe rendering from CDN
-      img.crossOrigin = 'anonymous'; 
-      img.onload = () => {
+      if (useCors) img.crossOrigin = 'anonymous';
+      img.onload = () => resolve(img);
+      img.onerror = (e) => reject(e);
+      img.src = url;
+    });
+
+    try {
+        // First try with CORS (good for CDN/Servers)
+        const img = await load(this.basePath + src, true);
         this.images.set(key, img);
         this.loaded.images++;
-        resolve(img);
-      };
-      img.onerror = (e) => {
-        console.error(`Failed to load image: ${src}`, e);
-        // Resolve with null instead of rejecting to allow game to continue with fallbacks
-        resolve(null); 
-      };
-      img.src = this.basePath + src;
+        return img;
+    } catch (e) {
+        // Fallback: try without CORS (good for local files/some servers)
+        try {
+            console.warn(`[ResourceLoader] Failed to load ${src} with CORS, retrying without...`);
+            const img = await load(this.basePath + src, false);
+            this.images.set(key, img);
+            this.loaded.images++;
+            return img;
+        } catch (e2) {
+             console.error(`[ResourceLoader] Failed to load image: ${src}`, e2);
+             // Resolve null to allow fallback rendering
+             return null;
+        }
+    }
+  }
+
+  unlockAudio() {
+    this.sounds.forEach(audio => {
+      try {
+        const originalVolume = audio.volume;
+        audio.volume = 0;
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = originalVolume || 1;
+            }).catch(() => {
+                audio.volume = originalVolume || 1;
+            });
+        }
+      } catch (e) {
+         console.warn('Audio unlock failed', e);
+      }
     });
   }
 
   async loadSound(key, src) {
-    return new Promise((resolve, reject) => {
+    const load = (url, useCors) => new Promise((resolve, reject) => {
       const audio = new Audio();
-      audio.oncanplaythrough = () => {
+      if (useCors) audio.crossOrigin = 'anonymous';
+      audio.preload = 'auto'; // Hint to browser
+      
+      let timeoutId;
+
+      // Use canplaythrough for reliability
+      const onCanPlay = () => {
+          cleanup();
+          resolve(audio);
+      };
+      
+      const onError = (e) => {
+          cleanup();
+          reject(e);
+      };
+      
+      const cleanup = () => {
+          clearTimeout(timeoutId);
+          audio.removeEventListener('canplaythrough', onCanPlay);
+          audio.removeEventListener('error', onError);
+      };
+      
+      audio.addEventListener('canplaythrough', onCanPlay);
+      audio.addEventListener('error', onError);
+      
+      audio.src = url;
+      audio.load(); // Explicitly call load
+
+      // Timeout fallback (e.g. mobile browsers blocking auto-download)
+      timeoutId = setTimeout(() => {
+          console.warn(`[ResourceLoader] Sound load timed out: ${url}`);
+          cleanup();
+          // Resolve anyway to avoid blocking game load, but sound might not play immediately
+          resolve(audio); 
+      }, 3000);
+    });
+
+    try {
+        // First try with CORS
+        const audio = await load(this.basePath + src, true);
         this.sounds.set(key, audio);
         this.loaded.sounds++;
-        resolve(audio);
-      };
-      audio.onerror = reject;
-      audio.src = this.basePath + src;
-      audio.crossOrigin = 'anonymous';
-    });
+        return audio;
+    } catch (e) {
+        // Fallback without CORS
+        try {
+            console.warn(`[ResourceLoader] Failed to load sound ${src} with CORS, retrying without...`);
+            const audio = await load(this.basePath + src, false);
+            this.sounds.set(key, audio);
+            this.loaded.sounds++;
+            return audio;
+        } catch (e2) {
+             console.error(`[ResourceLoader] Failed to load sound: ${src}`, e2);
+             // Create a dummy audio object to prevent crashes
+             const dummyAudio = { play: () => Promise.resolve(), pause: () => {}, currentTime: 0, volume: 1 };
+             this.sounds.set(key, dummyAudio);
+             return dummyAudio;
+        }
+    }
   }
 
   async loadAllResources() {
@@ -305,8 +388,35 @@ class ResourceLoader {
   playSound(key) {
     const audio = this.getSound(key);
     if (audio) {
-      audio.currentTime = 0;
-      audio.play().catch(() => {});
+      try {
+          // Clone node to allow overlapping sounds (important for fast interactions)
+          // BUT only if it's a real Audio node
+          if (audio instanceof Audio) {
+               // Mobile browsers often block cloned audio unless also triggered by user event
+               // For simplicity and stability, we just reset currentTime
+               if (audio.paused) {
+                   audio.currentTime = 0;
+                   const promise = audio.play();
+                   if (promise !== undefined) {
+                       promise.catch(e => {
+                           // Auto-play policy blocked
+                           // console.warn('Audio play blocked:', e);
+                       });
+                   }
+               } else {
+                   // If already playing, clone it for overlap (desktop mostly)
+                   // On mobile this might fail silently, which is fine
+                   const clone = audio.cloneNode();
+                   clone.volume = audio.volume;
+                   clone.play().catch(() => {});
+               }
+          } else {
+              // Dummy object
+              audio.play(); 
+          }
+      } catch (e) {
+          console.warn('Error playing sound:', key, e);
+      }
     }
   }
 
@@ -1620,46 +1730,66 @@ class GameEngine {
       }
     });
 
-    // Touch input (Global window listener like downgame.js)
+    // Touch input (Scope to canvas to avoid blocking page scroll)
     const handleTouch = (e) => {
-      if (e.cancelable) e.preventDefault();
-      
+      const rect = this.canvas.getBoundingClientRect();
       const touches = e.changedTouches;
+      let interacted = false;
+      
       for (let i = 0; i < touches.length; i++) {
         const touch = touches[i];
-        const isLeft = touch.clientX < window.innerWidth * 0.5;
-
+        const inside =
+          touch.clientX >= rect.left &&
+          touch.clientX <= rect.right &&
+          touch.clientY >= rect.top &&
+          touch.clientY <= rect.bottom;
+        if (!inside) continue;
+        interacted = true;
+        
+        const isLeft = touch.clientX < rect.left + rect.width * 0.5;
+        
         if (e.type === 'touchstart') {
           if (isLeft) {
-              if (this.inputState.leftPressed === null) {
-                  this.inputState.leftPressed = touch.identifier;
-                  this.player.isMovingLeft = true;
-                  this.player.isMovingRight = false;
-              }
+            if (this.inputState.leftPressed === null) {
+              this.inputState.leftPressed = touch.identifier;
+              this.player.isMovingLeft = true;
+              this.player.isMovingRight = false;
+            }
           } else {
-              if (this.inputState.rightPressed === null) {
-                  this.inputState.rightPressed = touch.identifier;
-                  this.player.isMovingRight = true;
-                  this.player.isMovingLeft = false;
-              }
+            if (this.inputState.rightPressed === null) {
+              this.inputState.rightPressed = touch.identifier;
+              this.player.isMovingRight = true;
+              this.player.isMovingLeft = false;
+            }
           }
         } else if (e.type === 'touchend' || e.type === 'touchcancel') {
-           if (touch.identifier === this.inputState.leftPressed) {
-              this.inputState.leftPressed = null;
-              this.player.isMovingLeft = false;
-              if (this.inputState.rightPressed !== null) this.player.isMovingRight = true;
-           } else if (touch.identifier === this.inputState.rightPressed) {
-              this.inputState.rightPressed = null;
-              this.player.isMovingRight = false;
-              if (this.inputState.leftPressed !== null) this.player.isMovingLeft = true;
-           }
+          if (touch.identifier === this.inputState.leftPressed) {
+            this.inputState.leftPressed = null;
+            this.player.isMovingLeft = false;
+            if (this.inputState.rightPressed !== null) this.player.isMovingRight = true;
+          } else if (touch.identifier === this.inputState.rightPressed) {
+            this.inputState.rightPressed = null;
+            this.player.isMovingRight = false;
+            if (this.inputState.leftPressed !== null) this.player.isMovingLeft = true;
+          }
         }
+      }
+      
+      if (interacted && e.cancelable) {
+        e.preventDefault();
       }
     };
 
-    window.addEventListener('touchstart', handleTouch, { passive: false });
-    window.addEventListener('touchend', handleTouch, { passive: false });
-    window.addEventListener('touchcancel', handleTouch, { passive: false });
+    this.canvas.addEventListener('touchstart', handleTouch, { passive: false });
+    this.canvas.addEventListener('touchend', handleTouch, { passive: false });
+    this.canvas.addEventListener('touchcancel', handleTouch, { passive: false });
+
+    // Unlock audio on first touch interaction
+    const unlockHandler = () => {
+        if (this.resources) this.resources.unlockAudio();
+        this.canvas.removeEventListener('touchstart', unlockHandler);
+    };
+    this.canvas.addEventListener('touchstart', unlockHandler, { passive: true });
   }
 
   handleSpacePress() {
@@ -1682,6 +1812,11 @@ class GameEngine {
 
   start() {
     if (this.isRunning) return;
+    
+    // Unlock audio on start (user interaction)
+    if (this.resources) {
+        this.resources.unlockAudio();
+    }
     
     // Ensure static layers are ready
     if (!this.ceilingCanvas) {
@@ -2234,6 +2369,13 @@ export default class DownGame {
 
     // Merge config with defaults
     const finalConfig = { ...GAME_CONFIG, ...config };
+    
+    // Auto-adjust height for mobile if not overridden
+    // Mobile needs more vertical space (500px), Desktop fits better with standard 420px
+    if (!config.CANVAS_HEIGHT && window.innerWidth <= 768) {
+        finalConfig.CANVAS_HEIGHT = 500;
+    }
+
     const basePath = config.root || './';
 
     // Load resources
@@ -2317,7 +2459,8 @@ function setupGameUI(container, engine) {
           .downfloor-container .downfloor-game-button,
           .downfloor-container .downfloor-best-score,
           .downfloor-container .downfloor-reset-button {
-              width: 320px !important;
+              width: 90% !important;
+              max-width: 320px !important;
               box-sizing: border-box !important;
               padding-left: 0 !important;
               padding-right: 0 !important;

@@ -506,8 +506,8 @@
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(37, 99, 235, 0.15));
       border: 1px solid rgba(59, 130, 246, 0.3);
       border-radius: 8px;
-      padding: 10px 16px;
-      margin-bottom: 15px;
+      padding: 6px 12px;
+      margin-bottom: 8px;
       text-align: center;
       animation: pulseHint 2s ease-in-out infinite;
     }
@@ -516,13 +516,13 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      font-size: 14px;
+      gap: 8px;
+      font-size: 13px;
       color: var(--text-primary);
     }
     
     .touch-icon {
-      font-size: 20px;
+      font-size: 16px;
       animation: tapAnimation 1.5s ease-in-out infinite;
     }
     
@@ -1364,7 +1364,7 @@
   </footer>
 
   <script type="module">
-    import Downfloor from './downgame.js';
+    import Downfloor from './game-engine.js';
     
     // Difficulty configuration generation strategy
     // We use a linear interpolation strategy to generate a smooth difficulty curve
