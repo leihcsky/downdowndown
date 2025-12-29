@@ -2306,6 +2306,159 @@ function setupGameUI(container, engine) {
     console.error('downfloor-container not found');
     return;
   }
+
+  // Inject Custom Styles for UI Consistency and New Elements
+  const styleId = 'downfloor-custom-styles';
+  if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+          /* Force consistent width for all game buttons and boxes */
+          .downfloor-container .downfloor-game-button,
+          .downfloor-container .downfloor-best-score,
+          .downfloor-container .downfloor-reset-button {
+              width: 320px !important;
+              box-sizing: border-box !important;
+              padding-left: 0 !important;
+              padding-right: 0 !important;
+              justify-content: center !important;
+              text-align: center !important;
+          }
+
+          .downfloor-container .downfloor-game-button {
+              padding: 20px 0 !important;
+          }
+
+          /* Styles for Best Score and Reset Button (New Elements) */
+          .downfloor-container .downfloor-best-score,
+          .downfloor-container .downfloor-reset-button {
+              font-size: 17px;
+              font-family: 'Inter', sans-serif;
+              font-weight: 600;
+              color: #d1d5db;
+              padding: 12px 16px;
+              background: rgba(30, 30, 50, 0.6);
+              border: 1px solid rgba(96, 165, 250, 0.2);
+              border-radius: 8px;
+              backdrop-filter: blur(10px);
+              cursor: default;
+          }
+
+          .downfloor-container .downfloor-reset-button {
+              cursor: pointer;
+              transition: all 0.2s ease;
+          }
+
+          .downfloor-container .downfloor-reset-button:hover {
+              background: rgba(30, 30, 50, 0.8);
+              border-color: rgba(96, 165, 250, 0.4);
+              color: #f3f4f6;
+              transform: translateY(-2px);
+          }
+
+          /* Modal Styles */
+          .downfloor-container .downfloor-modal-container {
+              position: absolute;
+              inset: 0;
+              margin: 0;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              opacity: 0;
+              visibility: hidden;
+              overscroll-behavior: contain;
+              z-index: 999;
+              background-color: rgba(15, 15, 35, 0.9);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              overflow-y: hidden;
+              border: none;
+              pointer-events: auto !important;
+          }
+
+          .downfloor-container .downfloor-modal-box {
+              width: 85%;
+              max-width: 400px;
+              background: rgba(30, 30, 50, 0.95);
+              border: 1px solid rgba(96, 165, 250, 0.3);
+              border-radius: 16px;
+              box-shadow: 
+                  0 25px 50px rgba(0, 0, 0, 0.5),
+                  0 0 0 1px rgba(255, 255, 255, 0.1);
+              overflow-y: auto;
+              overscroll-behavior: contain;
+              padding: 24px;
+              font-family: 'Inter', sans-serif;
+              animation: modal-pop 0.3s ease-out;
+          }
+
+          @media only screen and (max-width: 600px) {
+              .downfloor-container .downfloor-modal-box {
+                  width: 90%;
+                  padding: 20px;
+              }
+          }
+
+          .downfloor-container .downfloor-modal-text {
+              font-size: 18px;
+              font-weight: 600;
+              margin-bottom: 20px;
+              color: #f3f4f6;
+              line-height: 1.5;
+          }
+
+          .downfloor-container .downfloor-modal-action {
+              margin-top: 24px;
+              display: flex;
+              gap: 12px;
+              justify-content: flex-end;
+          }
+
+          .downfloor-container .downfloor-modal-btn {
+              font-family: 'Inter', sans-serif;
+              cursor: pointer;
+              padding: 10px 20px;
+              border: 1px solid transparent;
+              font-size: 15px;
+              text-align: center;
+              font-weight: 600;
+              user-select: none;
+              touch-action: manipulation;
+              border-radius: 8px;
+              transition: all 0.2s ease;
+          }
+
+          .downfloor-container .downfloor-modal-btn:hover {
+              transform: translateY(-1px);
+          }
+
+          .downfloor-container .downfloor-modal-btn:not(.reset-button) {
+              color: #9ca3af;
+              background: rgba(75, 85, 99, 0.5);
+              border-color: rgba(156, 163, 175, 0.3);
+          }
+
+          .downfloor-container .downfloor-modal-btn:not(.reset-button):hover {
+              background: rgba(75, 85, 99, 0.7);
+              color: #d1d5db;
+          }
+
+          .downfloor-container .reset-button {
+              color: #ffffff;
+              background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+              border-color: rgba(239, 68, 68, 0.5);
+              box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+          }
+
+          .downfloor-container .reset-button:hover {
+              background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+              box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+          }
+      `;
+      document.head.appendChild(style);
+  }
   
   // Ensure container has relative positioning for absolute children
   downfloorContainer.style.position = 'relative';
@@ -2315,7 +2468,6 @@ function setupGameUI(container, engine) {
   const canvas = downfloorContainer.querySelector('canvas');
   if (canvas) {
       // Ensure canvas respects the CSS padding
-      // canvas.style.paddingTop = '39px'; // This is in CSS, no need to set inline unless overridden
       canvas.style.paddingTop = ''; // Clear any inline override
   }
   
@@ -2329,23 +2481,22 @@ function setupGameUI(container, engine) {
     gameOver: i18n?.gameOver || 'Game Over',
     finalScore: i18n?.score || 'Floor:',
     soundOn: i18n?.soundOn || 'Sound: ON',
-    soundOff: i18n?.soundOff || 'Sound: OFF'
+    soundOff: i18n?.soundOff || 'Sound: OFF',
+    resetConfirm: i18n?.resetConfirm || 'Are you sure you want to reset the best score?',
+    confirm: i18n?.confirm || 'Confirm',
+    cancel: i18n?.cancel || 'Cancel',
+    reset: i18n?.reset || 'RESET'
   };
   
     // Create overlay container that wraps everything to match downgame.js structure
-    // <div class="downfloor-overlay-container ready">
-    //   <div class="downfloor-topbar">...</div>
-    //   <div class="downfloor-game-controls">...</div>
-    // </div>
-    
     const overlayContainer = document.createElement('div');
     overlayContainer.className = 'downfloor-overlay-container ready';
     
     // Create top bar
     const topBar = document.createElement('div');
     topBar.className = 'downfloor-topbar';
-    // FIX: Set relative positioning to stack naturally above canvas
-    topBar.style.position = 'relative';
+    // FIX: Restore absolute positioning to ensure correct width and padding handling (left:0, right:0 from CSS)
+    // topBar.style.position = 'relative'; // REMOVED: Caused layout issues (sound button moved to left)
     topBar.style.background = 'rgba(30, 30, 50, 0.95)'; // Ensure background is opaque
     topBar.innerHTML = `
       <div class="downfloor-life-container">
@@ -2358,7 +2509,7 @@ function setupGameUI(container, engine) {
         <div class="downfloor-score">${text.score} <span id="current-score">0</span></div>
         <button class="downfloor-sound-toggle" id="sound-toggle" title="${engine.soundEnabled ? text.soundOn : text.soundOff}">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="18" class="downfloor-sound-icon ${engine.soundEnabled ? 'sound-on' : 'sound-off'}">
-             <g fill="#000" fill-rule="nonzero">
+             <g fill="#fff" fill-rule="nonzero">
                <path d="M122 39c5 2 8 7 8 12v154c0 5-3 10-8 12s-10 1-14-3l-49-47H25c-7 0-13-6-13-13v-52c0-7 6-13 13-13h34l49-47c4-4 9-5 14-3ZM187 37c5-5 13-5 18 0a128 128 0 0 1 0 183c-5 5-13 5-18 0-5-6-5-14 0-19a102 102 0 0 0 0-146c-5-5-5-13 0-18Z"></path>
                <path d="M150 73c5-5 13-5 18 0a78 78 0 0 1 23 55c0 21-8 40-23 54-5 5-13 5-18 0s-5-13 0-18a51 51 0 0 0 0-73c-5-5-5-13 0-18Z"></path>
              </g>
@@ -2370,61 +2521,99 @@ function setupGameUI(container, engine) {
     // Create game controls
     const gameControls = document.createElement('div');
     gameControls.className = 'downfloor-game-controls';
+    // Ensure parent flex properties are respected by children wrapper
     gameControls.innerHTML = `
-      <div id="controls-ready" style="display: block;">
+      <div id="controls-ready" style="display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%;">
          <button class="downfloor-game-button start-button" id="start-button">
            ${text.start}
            <span class="downfloor-game-button-hint">(Space / Enter)</span>
          </button>
          <div class="downfloor-best-score">${text.best} <span id="best-score">${engine.bestScore}</span></div>
-         <div class="downfloor-reset-button" id="reset-button">RESET</div>
+         <div class="downfloor-reset-button" id="reset-button">${text.reset}</div>
       </div>
       
-      <div id="controls-paused" style="display: none;">
+      <div id="controls-paused" style="display: none; flex-direction: column; align-items: center; gap: 16px; width: 100%;">
          <button class="downfloor-game-button continue-button" id="continue-button">
            Continue
            <span class="downfloor-game-button-hint">(Space / Enter)</span>
          </button>
       </div>
       
-      <div id="controls-gameover" style="display: none;">
+      <div id="controls-gameover" style="display: none; flex-direction: column; align-items: center; gap: 16px; width: 100%;">
          <button class="downfloor-game-button restart-button" id="restart-button">
            ${text.restart}
            <span class="downfloor-game-button-hint">(Space / Enter)</span>
          </button>
-         <div class="downfloor-game-over-text">${text.gameOver}</div>
-         <div class="downfloor-game-over-info">
-           <p>${text.finalScore} <span id="final-score">0</span></p>
-         </div>
+         <div class="downfloor-best-score">${text.best} <span id="gameover-best-score">${engine.bestScore}</span></div>
+         <div class="downfloor-reset-button" id="gameover-reset-button">${text.reset}</div>
+      </div>
+    `;
+    
+    // Create Modal
+    const modalContainer = document.createElement('div');
+    modalContainer.className = 'downfloor-modal-container';
+    modalContainer.id = 'downfloor-modal';
+    modalContainer.innerHTML = `
+      <div class="downfloor-modal-box">
+        <div class="downfloor-modal-text">${text.resetConfirm}</div>
+        <div class="downfloor-modal-action">
+          <button type="button" class="downfloor-modal-btn reset-button" id="confirm-reset">${text.confirm}</button>
+          <button type="button" class="downfloor-modal-btn" id="cancel-reset">${text.cancel}</button>
+        </div>
       </div>
     `;
     
     overlayContainer.appendChild(topBar);
     overlayContainer.appendChild(gameControls);
+    // overlayContainer.appendChild(modalContainer); // MOVED: Append directly to downfloorContainer to avoid pointer-events issues
     downfloorContainer.appendChild(overlayContainer);
+    downfloorContainer.appendChild(modalContainer); // Append modal last to be on top
     
     // Event handlers
     const startButton = document.getElementById('start-button');
     const restartButton = document.getElementById('restart-button');
     const continueButton = document.getElementById('continue-button');
     const resetButton = document.getElementById('reset-button');
+    const gameoverResetButton = document.getElementById('gameover-reset-button');
     const soundToggle = document.getElementById('sound-toggle');
     const currentScoreEl = document.getElementById('current-score');
     const bestScoreEl = document.getElementById('best-score');
-    const finalScoreEl = document.getElementById('final-score');
+    const gameoverBestScoreEl = document.getElementById('gameover-best-score');
     const lifeUnits = topBar.querySelectorAll('.downfloor-life-bar-unit');
     const controlsReady = document.getElementById('controls-ready');
     const controlsPaused = document.getElementById('controls-paused');
     const controlsGameover = document.getElementById('controls-gameover');
     
+    const modal = document.getElementById('downfloor-modal');
+    const confirmResetBtn = document.getElementById('confirm-reset');
+    const cancelResetBtn = document.getElementById('cancel-reset');
+    
     startButton.addEventListener('click', () => engine.start());
     restartButton.addEventListener('click', () => engine.restart());
     continueButton.addEventListener('click', () => engine.resume());
-    resetButton.addEventListener('click', () => {
+    soundToggle.addEventListener('click', () => engine.toggleSound());
+    
+    // Modal Logic
+    const showModal = () => {
+        modal.style.visibility = 'visible';
+        modal.style.opacity = '1';
+    };
+    const hideModal = () => {
+        modal.style.visibility = 'hidden';
+        modal.style.opacity = '0';
+    };
+    
+    resetButton.addEventListener('click', showModal);
+    gameoverResetButton.addEventListener('click', showModal);
+    
+    confirmResetBtn.addEventListener('click', () => {
         engine.clearBestScore();
         bestScoreEl.textContent = '0';
+        gameoverBestScoreEl.textContent = '0';
+        hideModal();
     });
-    soundToggle.addEventListener('click', () => engine.toggleSound());
+    
+    cancelResetBtn.addEventListener('click', hideModal);
     
     // Update UI based on game events
     engine.on('gameStart', () => {
@@ -2452,7 +2641,7 @@ function setupGameUI(container, engine) {
     engine.on('gamePause', () => {
       overlayContainer.className = 'downfloor-overlay-container paused';
       controlsReady.style.display = 'none';
-      controlsPaused.style.display = 'block';
+      controlsPaused.style.display = 'flex'; // Use flex
       controlsGameover.style.display = 'none';
     });
     
@@ -2467,9 +2656,8 @@ function setupGameUI(container, engine) {
       overlayContainer.className = 'downfloor-overlay-container gameover';
       controlsReady.style.display = 'none';
       controlsPaused.style.display = 'none';
-      controlsGameover.style.display = 'block';
-      finalScoreEl.textContent = data.score;
-      bestScoreEl.textContent = data.bestScore;
+      controlsGameover.style.display = 'flex'; // Use flex
+      gameoverBestScoreEl.textContent = data.bestScore;
     });
   
   engine.on('scoreUpdate', (data) => {
