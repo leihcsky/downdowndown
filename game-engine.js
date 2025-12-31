@@ -296,12 +296,14 @@ class ResourceLoader {
       audio.load(); // Explicitly call load
 
       // Timeout fallback (e.g. mobile browsers blocking auto-download)
+      // Reduced timeout to 800ms to speed up game load
+      // Mobile browsers often won't load audio until interaction anyway
       timeoutId = setTimeout(() => {
-          console.warn(`[ResourceLoader] Sound load timed out: ${url}`);
+          console.warn(`[ResourceLoader] Sound load timed out (continuing anyway): ${url}`);
           cleanup();
           // Resolve anyway to avoid blocking game load, but sound might not play immediately
           resolve(audio); 
-      }, 3000);
+      }, 800);
     });
 
     try {
@@ -2371,13 +2373,14 @@ export default class DownGame {
     };
 
     let progress = 0;
+    // Faster progress bar (20ms instead of 50ms) to make it feel snappier
     const progressInterval = setInterval(() => {
-        if (progress < 90) {
-            progress += Math.random() * 5 + 1; // Random increment
-            if (progress > 90) progress = 90;
+        if (progress < 95) {
+            progress += Math.random() * 10 + 2; // Larger random increment
+            if (progress > 95) progress = 95;
             updateProgress(progress);
         }
-    }, 50);
+    }, 20);
 
     // Merge config with defaults
     const finalConfig = { ...GAME_CONFIG, ...config };
