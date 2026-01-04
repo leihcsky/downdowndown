@@ -1832,6 +1832,12 @@ class GameEngine {
         this.resources.unlockAudio();
     }
     
+    // Send GA Event: Game Start
+    this.sendAnalyticsEvent('game_start', {
+        event_category: 'gameplay',
+        level: this.level
+    });
+    
     // Ensure static layers are ready
     if (!this.ceilingCanvas) {
         this.prepareStaticLayers();
@@ -2085,6 +2091,15 @@ class GameEngine {
       if (dmg) { // Only play sound if damage was taken (invulnerability check passed)
          this.playSound(dmg === 'dead' ? 'dead' : 'hurt');
          this.eventBus.emit('playerHurt', { hp: this.player.hp, damage: this.config.CEILING_DAMAGE || 5 });
+         
+         if (dmg === 'dead') {
+             this.sendAnalyticsEvent('game_over', {
+                event_category: 'gameplay',
+                score: this.score,
+                level: this.level,
+                reason: 'spikes'
+            });
+         }
       }
       
       if (this.player.onGround) {
@@ -2104,6 +2119,14 @@ class GameEngine {
             this.player.isDead = true;
             this.player.deathTime = Date.now();
             this.eventBus.emit('playerHurt', { hp: 0, damage: 999 });
+            
+            // Send GA Event: Game Over
+            this.sendAnalyticsEvent('game_over', {
+                event_category: 'gameplay',
+                score: this.score,
+                level: this.level,
+                reason: 'fall'
+            });
         }
     }
     
@@ -2265,9 +2288,24 @@ class GameEngine {
     }
   }
 
+  // Helper to send GA events safely
+  sendAnalyticsEvent(eventName, params = {}) {
+    if (typeof window.gtag === 'function') {
+      try {
+        window.gtag('event', eventName, params);
+      } catch (e) {
+        console.warn('Analytics error:', e);
+      }
+    }
+  }
+
   toggleSound() {
     this.soundEnabled = !this.soundEnabled;
     this.eventBus.emit('soundToggle', { enabled: this.soundEnabled });
+    this.sendAnalyticsEvent('toggle_sound', { 
+        event_category: 'game_ui',
+        value: this.soundEnabled ? 1 : 0 
+    });
   }
 
   loadBestScore() {
