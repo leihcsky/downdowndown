@@ -43,6 +43,11 @@
   <link rel="icon" type="image/png" sizes="48x48" href="favicon-48x48.png">
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   
+  <!-- Preload Critical Assets -->
+  <link rel="preload" as="image" href="logo.svg" fetchpriority="high">
+  <link rel="preload" as="image" href="images/bg.png">
+  <link rel="preload" as="image" href="images/hero.png">
+  
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -558,7 +563,19 @@
       width: 100%;
       max-width: 580px;
       margin: 0 auto;
+      /* Prevent CLS by reserving space */
+      min-height: 420px; 
       /* 游戏放大到适合页面的尺寸 */
+    }
+
+    @media (max-width: 768px) {
+      #game-root {
+        min-height: 500px;
+      }
+      
+      .mobile-touch-hint {
+        display: block !important;
+      }
     }
     
     #game-root > * {
@@ -918,7 +935,7 @@
     <!-- Hero Section -->
     <section class="hero-section">
       <!-- Logo -->
-      <img src="logo.svg" alt="DownDownDown - Vertical Arcade Platform Game" class="site-logo">
+      <img src="logo.svg" alt="DownDownDown - Vertical Arcade Platform Game" class="site-logo" width="400" height="120" fetchpriority="high">
       
       <!-- H1 hidden but kept for SEO -->
       <h1 class="with-logo">DownDownDown: Free Online Falling Game (Dare to Drop 100 Floors?)</h1>
